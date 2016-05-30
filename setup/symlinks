@@ -4,9 +4,9 @@
 
 # Ref   https://github.com/holman/dotfiles/blob/master/script/bootstrap
 
-if [ "$(uname -s)" == "Darwin" ]	  
+if [ "$(uname -s)" == "Darwin" ]; then 
   echo "This is OS X, quitting"
-  exit 1;
+  exit 1
 fi
 
 cd "$(dirname "$0")/.."
