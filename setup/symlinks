@@ -2,7 +2,12 @@
 #
 # bootstrap installs things.
 
-# From https://github.com/holman/dotfiles/blob/master/script/bootstrap
+# Ref   https://github.com/holman/dotfiles/blob/master/script/bootstrap
+
+if [ "$(uname -s)" == "Darwin" ]	  
+  echo "This is OS X, quitting"
+  exit 1;
+fi
 
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd -P)
