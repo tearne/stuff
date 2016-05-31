@@ -1,0 +1,6 @@
+not_on_mac () {
+  if [ "$(uname -s)" == "Darwin" ]; then
+    echo "This is OS X, quitting"
+    exit 1
+  fi
+}
