@@ -1,0 +1,9 @@
+#!/bin/bash
+
+VERSION=smartgit-linux-7_1_3
+DIR=~/bin/$VERSION
+mkdir -p $DIR
+aria2c -d $DIR http://www.syntevo.com/static/smart/download/smartgit/$VERSION.tar.gz \
+&& tar -vzxf $DIR/$VERSION.tar.gz --strip 1 --directory $DIR \
+&& rm $DIR/$VERSION.tar.gz \
+&& ln -s $DIR/bin/smartgit.sh ~/bin/smartgit

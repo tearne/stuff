@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DEBIAN_FRONTEND=noninteractive
+
+apt-get update \
+  && apt-get install -y software-properties-common \
+  && add-apt-repository ppa:webupd8team/atom \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends atom
+
+cp /usr/lib/x86_64-linux-gnu/libxcb.so.1 /opt/atom \
+ #&& chmod 777 /opt/atom/libxcb.so.1 \
+ && sed -i 's/BIG-REQUESTS/_IG-REQUESTS/' /opt/atom/libxcb.so.1
