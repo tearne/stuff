@@ -4,10 +4,8 @@
 
 # Ref   https://github.com/holman/dotfiles/blob/master/script/bootstrap
 
-if [ "$(uname -s)" == "Darwin" ]; then 
-  echo "This is OS X, quitting"
-  exit 1
-fi
+. "$(dirname "$0")/functions"
+not_on_mac
 
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd -P)
@@ -146,18 +144,6 @@ install_dotfiles () {
 
 setup_gitconfig
 install_dotfiles
-
-# If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
-  info "installing dependencies"
-  if source bin/dot > /tmp/dotfiles-dot 2>&1
-  then
-    success "dependencies installed"
-  else
-    fail "error installing dependencies"
-  fi
-fi
 
 echo ''
 echo '  All installed!'
