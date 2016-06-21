@@ -1,6 +1,11 @@
 #!/bin/bash
 
-DEBIAN_FRONTEND=noninteractive
+if [ "$(whoami)" != "root" ]; then
+	echo "Sorry, you are not root."
+	exit 1
+fi
+
+export DEBIAN_FRONTEND=noninteractive
 
 apt-get update \
   && apt-get install -y software-properties-common \
