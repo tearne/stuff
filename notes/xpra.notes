@@ -1,0 +1,27 @@
+Ubuntu 16 LTS
+sudo apt-get update \
+&& sudo apt-get -y upgrade \
+&& sudo apt-get install -y --no-install-recommends \
+        xpra \
+        openjdk-8-jdk git firefox
+
+sudo apt-get install xpra
+
+--== .ssh/config ==--
+Host frankfurt
+ HostName 52.57.40.132
+ PreferredAuthentications publickey
+ IdentityFile ~/.ssh/tbmifrankfurtdesktop.pem
+
+--== OSX App as command ==--
+#!/bin/bash
+cd /Applications/Xpra.app/Contents/MacOS/
+./Xpra "$@"
+
+xpra start :100
+DISPLAY=:100 firefox
+xpra attach ssh:ubuntu@x.x.x.x:100  [with ssh config and keychain]
+
+xpra --ssh='ssh -i tbmifrankfurtdesktop.pem ubuntu@52.57.19.238' attach ssh:100
+
+pra --ssh='ssh -i tbmifrankfurtdesktop.pem ubuntu@52.57.19.238' start ssh::100 --start-child=firefox
