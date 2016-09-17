@@ -8,7 +8,6 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update \
-  && apt-get install -y software-properties-common \
   && add-apt-repository ppa:webupd8team/atom \
   && apt-get update \
   && apt-get install -y --no-install-recommends atom
