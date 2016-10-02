@@ -6,10 +6,10 @@ if [ "$(whoami)" != "root" ]; then
 fi
 
 DEBIAN_FRONTEND=noninteractive
-ME=$SUDO_USER
+ME=$(who | aws '{print $1}')
 
 apt update \
-&& apt install -y --no-install-recommends lxde \
+&& apt install -y curl lxqt \
 && curl -L http://download.nomachine.com/download/5.1/Linux/nomachine_5.1.54_1_amd64.deb -o /tmp/nomachine.deb \
 && dpkg --install /tmp/nomachine.deb \
 && rm /tmp/*.deb \
@@ -17,5 +17,5 @@ apt update \
 && cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
 && chmod 600 $HOME/.nx/config/authorized.crt \
 && chown -R $ME:$ME $HOME/.nx \
-&& sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg \
+&& sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxqt"|g' /usr/NX/etc/node.cfg \
 && /etc/NX/nxserver --startup
