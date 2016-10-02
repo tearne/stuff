@@ -10,7 +10,7 @@ ME=$SUDO_USER
 
 apt update \
 && apt install -y --no-install-recommends lxde \
-&& curl -L http://download.nomachine.com/download/5.1/Linux/nomachine_5.1.44_1_amd64.deb -o /tmp/nomachine.deb \
+&& curl -L http://download.nomachine.com/download/5.1/Linux/nomachine_5.1.54_1_amd64.deb -o /tmp/nomachine.deb \
 && dpkg --install /tmp/nomachine.deb \
 && rm /tmp/*.deb \
 && mkdir -p $HOME/.nx/config \
