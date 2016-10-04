@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=smartgit-linux-8_0_0
+VERSION=smartgit-linux-8_0_2
 DIR=~/bin/$VERSION
 mkdir -p $DIR
 aria2c -d $DIR http://www.syntevo.com/static/smart/download/smartgit/$VERSION.tar.gz \
