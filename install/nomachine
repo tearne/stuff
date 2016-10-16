@@ -6,7 +6,7 @@ if [ "$(whoami)" != "root" ]; then
 fi
 
 DEBIAN_FRONTEND=noninteractive
-ME=$(who | awk '{print $1}')
+ME=$(who am i | awk '{print $1}')
 
 apt update \
 && apt install -y tmux curl lxde \
