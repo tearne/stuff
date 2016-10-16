@@ -9,13 +9,17 @@ DEBIAN_FRONTEND=noninteractive
 ME=$(who | awk '{print $1}')
 
 apt update \
-&& apt install -y curl lxqt \
+&& apt install -y tmux curl lxde \
 && curl -L http://download.nomachine.com/download/5.1/Linux/nomachine_5.1.54_1_amd64.deb -o /tmp/nomachine.deb \
 && dpkg --install /tmp/nomachine.deb \
-&& rm /tmp/*.deb \
-&& mkdir -p $HOME/.nx/config \
-&& cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
-&& chmod 600 $HOME/.nx/config/authorized.crt \
-&& chown -R $ME:$ME $HOME/.nx \
-&& sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxqt"|g' /usr/NX/etc/node.cfg \
+&& rm /tmp/*.deb
+
+# \
+#&& mkdir -p $HOME/.nx/config \
+#&& cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
+#&& chmod 600 $HOME/.nx/config/authorized.crt \
+#&& chown -R $ME:$ME $HOME/.nx \
+
+sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg \
+&& sed -i 's/,automigrate=1/,automigrate=0/g' /usr/NX/etc/server.cfg \
 && /etc/NX/nxserver --startup
