@@ -20,10 +20,9 @@ apt update \
 
 sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
 
-sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg \
-sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg \
+sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
+sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
 
-sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg \
-sed -i 's/,automigrate=1/,automigrate=0/g' /usr/NX/etc/server.cfg \
+sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
 /etc/NX/nxserver --startup
