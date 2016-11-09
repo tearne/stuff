@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e
+DEBIAN_FRONTEND=noninteractive
+ME=$(who am i | awk '{print $1}')
+
 dpkg --add-architecture i386 \
   && apt -y update
 
@@ -11,4 +15,8 @@ apt -y install \
   libxrandr2:i386 libxrender1:i386 libxtst6:i386 zlib1g:i386
 
 curl -L http://download.teamviewer.com/download/teamviewer_i386.tar.xz \
-   | tar x --directory ~/opt
+   | tar -xJ --directory ~/opt
+
+chown -R $ME /opt/teamviewer
+
+/opt/teamviewer/tv-setup checklibs
