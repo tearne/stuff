@@ -25,4 +25,7 @@ sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/
 
 sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
+systemctl enable multi-user.target --force
+systemctl set-default multi-user.target
+
 /etc/NX/nxserver --startup
