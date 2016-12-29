@@ -1,13 +1,14 @@
 #!/bin/bash
 
-VER=rclone-v1.34
+VER=rclone-v1.34-linux-amd64
 
 set -e
 
 sudo apt update
-sudo apt install -y --no-install-recommends fuse ca-certificates
+sudo apt install -y --no-install-recommends fuse ca-certificates unzip
 
 mkdir -p ~/bin/$VER
-curl -L http://downloads.rclone.org/${VER}-linux-amd64.zip | tar xz --strip 1 --directory ~/bin/$VER
-rm -f ~/bin/rclone
-ln -s ~/bin/$VER/bin/idea.sh ~/bin/rclone
+curl -L -o /tmp/$VER.zip http://downloads.rclone.org/${VER}.zip
+unzip /tmp/$VER.zip -d ~/bin/
+rm /tmp/$VER.zip
+ln -s ~/bin/$VER/rclone ~/bin/rclone
