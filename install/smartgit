@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo apt update
+sudo apt install -y --no-install-recommends aria2
+
 VERSION=smartgit-linux-8_0_3
 DIR=~/bin/$VERSION
 mkdir -p $DIR
