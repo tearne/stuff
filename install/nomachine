@@ -13,12 +13,12 @@ sudo apt update \
 && cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
 && chmod 600 $HOME/.nx/config/authorized.crt
 
-sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
+sudo sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
 
-sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
-sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
+sudo sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
+sudo sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
 
-sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
+sudo sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
 sudo systemctl enable multi-user.target --force
 sudo systemctl set-default multi-user.target
