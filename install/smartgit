@@ -3,7 +3,7 @@
 sudo apt update
 sudo apt install -y --no-install-recommends aria2
 
-VERSION=smartgit-linux-8_0_3
+VERSION=smartgit-linux-17_0_1
 DIR=~/bin/$VERSION
 mkdir -p $DIR
 aria2c -d $DIR http://www.syntevo.com/static/smart/download/smartgit/$VERSION.tar.gz \
