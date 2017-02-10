@@ -13,9 +13,11 @@ sudo apt -y install \
   libxdamage1:i386 libxext6:i386 libxfixes3:i386 libxinerama1:i386 \
   libxrandr2:i386 libxrender1:i386 libxtst6:i386 zlib1g:i386
 
+mkdir -p ~/bin
+
 curl -L http://download.teamviewer.com/download/teamviewer_i386.tar.xz \
-   | tar -xJ --directory ~
+   | tar -xJ --directory ~/bin
+mv ~/bin/teamviewer ~/bin/teamviewer_i386
 
-#chown -R $ME /opt/teamviewer
-
-~/teamviewer/tv-setup checklibs
+ln -s ~/bin/teamviewer/teamviewer_i386 ~/bin/teamviewer
+~/bin/teamviewer_i386/tv-setup checklibs
