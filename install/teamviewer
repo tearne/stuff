@@ -18,4 +18,4 @@ curl -L http://download.teamviewer.com/download/teamviewer_i386.tar.xz \
 
 #chown -R $ME /opt/teamviewer
 
-sudo /opt/teamviewer/tv-setup checklibs
+~/teamviewer/tv-setup checklibs
