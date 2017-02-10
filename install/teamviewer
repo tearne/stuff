@@ -14,7 +14,7 @@ sudo apt -y install \
   libxrandr2:i386 libxrender1:i386 libxtst6:i386 zlib1g:i386
 
 curl -L http://download.teamviewer.com/download/teamviewer_i386.tar.xz \
-   | tar -xJ --directory ~/opt
+   | tar -xJ --directory ~
 
 #chown -R $ME /opt/teamviewer
 
