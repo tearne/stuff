@@ -18,5 +18,5 @@ mkdir -p ~/bin
 curl -L http://download.teamviewer.com/download/teamviewer_i386.tar.xz \
    | tar -xJ --directory ~/bin
 mv ~/bin/teamviewer ~/bin/teamviewer_i386
-ln -s ~/bin/teamviewer_i386/teamviewer/tv_bin/script/teamviewer ~/bin/teamviewer
+ln -s ~/bin/teamviewer_i386/tv_bin/script/teamviewer ~/bin/teamviewer
 ~/bin/teamviewer_i386/tv-setup checklibs
