@@ -1,5 +1,5 @@
 #!/bin/bash
-VER=ideaIC-2016.3
+VER=ideaIC-2017.1
 
 set -e
 
