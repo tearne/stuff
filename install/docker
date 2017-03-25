@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+curl -fsSL https://apt.dockerproject.org/gpg | sudo apt-key add -
+sudo apt-key fingerprint 58118E89F3A912897C070ADBF76221572C52609D
+
+sudo add-apt-repository \
+       "deb https://apt.dockerproject.org/repo/ \
+       ubuntu-$(lsb_release -cs) \
+       main"
+
+sudo apt-get update
+sudo apt-get -y install docker-engine
+
+# Run without sudo
+sudo usermod -aG docker $(whoami)
+
+cat <<EOF
+###
+#   OPTIONAL
+#
+#   Use '-g' to change docker data dir from /var/lib/docker
+#   (or just try a soft link)
+#
+#   (i) In /lib/systemd/system/docker.service
+#   (ii) Change
+#     "ExecStart=/usr/bin/dockerd -H fd://"
+#     to
+#     "ExecStart=/usr/bin/dockerd -g /new/path/docker -H fd://"
+#   (iii) Stop the service - systemctl stop docker
+#   (iv) Reload system daemon - systemctl daemon-reload
+#   (v) Restart service - systemctl start docker
+###
+EOF
