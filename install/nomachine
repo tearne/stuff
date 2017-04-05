@@ -3,11 +3,10 @@
 set -e
 
 DEBIAN_FRONTEND=noninteractive
-PACKAGE=nomachine_5.1.62_1_amd64.deb
 
 sudo apt update \
-&& sudo apt install -y wget lxde \
-&& wget http://download.nomachine.com/download/5.1/Linux/${NOMACHINE_PACKAGE_NAME} -O /tmp/nomachine.deb \
+&& sudo apt install -y curl lxde \
+&& curl -fSL http://download.nomachine.com/download/5.2/Linux/nomachine_5.2.11_1_amd64.deb -o /tmp/nomachine.deb \
 && sudo dpkg --install /tmp/nomachine.deb \
 && rm /tmp/*.deb \
 && mkdir -p $HOME/.nx/config \
