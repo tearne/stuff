@@ -6,7 +6,7 @@ DEBIAN_FRONTEND=noninteractive
 
 sudo apt update \
 && sudo apt install -y curl lxde \
-&& curl -L http://download.nomachine.com/download/5.1/Linux/nomachine_5.2.11_1_amd64.deb -o /tmp/nomachine.deb \
+&& curl -fSL http://download.nomachine.com/download/5.2/Linux/nomachine_5.2.21_1_amd64.deb -o /tmp/nomachine.deb \
 && sudo dpkg --install /tmp/nomachine.deb \
 && rm /tmp/*.deb \
 && mkdir -p $HOME/.nx/config \
