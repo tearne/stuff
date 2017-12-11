@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+DEBIAN_FRONTEND=noninteractive
+
+apt update \
+&& apt install -y curl lxde \
+&& curl -fSL http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.66_2_amd64.deb -o /tmp/nomachine.deb \
+&& apt install /tmp/nomachine.deb \
+&& rm /tmp/*.deb \
+&& mkdir -p $HOME/.nx/config \
+&& cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
+&& chmod 600 $HOME/.nx/config/authorized.crt
+
+sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
+
+sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
+sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
+
+sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
+
+systemctl enable multi-user.target --force
+systemctl set-default multi-user.target
