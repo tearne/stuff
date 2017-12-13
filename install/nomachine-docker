@@ -13,7 +13,7 @@ apt update \
 && cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
 && chmod 600 $HOME/.nx/config/authorized.crt
 
-sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
+#sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
 
 sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
 sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
