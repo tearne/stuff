@@ -47,7 +47,7 @@ echo "File to be downloaded: $FILE_URL"
 echo "Latest stable version: $VERSION"
 
 # Set install directory
-INSTALL_DIR="/opt/$VERSION"
+INSTALL_DIR="~/bin"
 
 # Check if latest version has been installed
 if [ -d "$INSTALL_DIR" ]; then
