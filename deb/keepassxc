@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+snapd install keepassxc
+ln -s /snap/keepassxc/current/usr/share/fonts ~/snap/keepassxc/current/.local/share/fonts
