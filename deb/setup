@@ -1,0 +1,20 @@
+#!/bin/bash
+
+export DEBIAN_FRONTEND=noninteractive
+
+sudo apt-mark hold xscreensaver
+
+sudo apt -y install \
+  lxqt-core \
+  lxqt-qtplugin \
+  lxqt-config \
+  sddm \
+  qterminal \
+  pavucontrol-qt \
+  firefox-esr \
+  open-vm-tools-desktop \
+  snapd \
+  htop
+
+snapd install keepassxc
+ln -s /snap/keepassxc/current/usr/share/fonts ~/snap/keepassxc/current/.local/share/fonts
