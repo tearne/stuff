@@ -3,10 +3,10 @@
 set -e
 
 DEBIAN_FRONTEND=noninteractive
-NOMACHINE=http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_amd64.deb
+NOMACHINE=http://download.nomachine.com/download/6.2/Linux/nomachine_6.2.4_1_amd64.deb
 
 sudo apt update \
-&& curl -fSL NOMACHINE -o /tmp/nomachine.deb \
+&& curl -fSL $NOMACHINE -o /tmp/nomachine.deb \
 && sudo dpkg --install /tmp/nomachine.deb \
 && rm /tmp/*.deb \
 && mkdir -p $HOME/.nx/config \
