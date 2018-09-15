@@ -15,11 +15,13 @@ sudo apt update \
 
 #sudo sed -i 's|DefaultDesktopCommand.*|DefaultDesktopCommand "/usr/bin/startlxde"|g' /usr/NX/etc/node.cfg
 
-sudo sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
-sudo sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
+# SSH
+#sudo sed -i '/#ClientConnectionMethods /s/^#//g' /usr/NX/etc/server.cfg
+#sudo sed -i 's/ClientConnectionMethods NX$/ClientConnectionMethods NX,SSH/g' /usr/NX/etc/server.cfg
 
 #sudo sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
+# Boot to console, not GUI
 sudo systemctl enable multi-user.target --force
 sudo systemctl set-default multi-user.target
 

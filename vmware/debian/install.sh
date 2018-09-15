@@ -20,5 +20,4 @@ sudo apt -y install \
   snapd \
   htop \
   gufw \
-  firefox \
-  thunderbird
+  firefox
