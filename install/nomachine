@@ -22,7 +22,7 @@ sudo apt update \
 #sudo sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
 # Boot to console, not GUI
-sudo systemctl enable multi-user.target --force
+sudo systemctl enable multi-user.target
 sudo systemctl set-default multi-user.target
 
 sudo /etc/NX/nxserver --startup
