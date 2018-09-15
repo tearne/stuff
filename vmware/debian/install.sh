@@ -19,5 +19,4 @@ sudo apt -y install \
   open-vm-tools-desktop \
   snapd \
   htop \
-  gufw \
-  firefox
+  gufw
