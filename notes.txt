@@ -1,7 +1,0 @@
-vim
-https://github.com/easymotion/vim-easymotion
-https://github.com/tpope/vim-fugitive
-https://github.com/ctrlpvim/ctrlp.vim
-https://github.com/ggreer/the_silver_searcher
-http://blog.petrzemek.net/2016/04/06/things-about-vim-i-wish-i-knew-earlier/
-

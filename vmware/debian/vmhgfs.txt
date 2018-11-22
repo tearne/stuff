@@ -1,13 +1,9 @@
 https://docs.vmware.com/en/VMware-Workstation-Pro/14.0/com.vmware.ws.using.doc/GUID-AB5C80FE-9B8A-4899-8186-3DB8201B1758.html
 
-Mounts all shares to /home/user1/shares
+Mount all shares to /home/user1/shares
 mount -t vmhgfs .host:/ /home/user1/shares
 /usr/bin/vmhgfs-fuse .host:/ /home/user1/shares -o subtype=vmhgfs-fuse,allow_other
 
-Mounts the share named foo to /tmp/foo
+Mount share foo to /tmp/foo
 mount -t vmhgfs .host:/foo /tmp/foo
 /usr/bin/vmhgfs-fuse .host:/foo /tmp/foo -o subtype=vmhgfs-fuse,allow_other
-
-Mounts the subdirectory bar within the share foo to /var/lib/bar
-mount -t vmhgfs .host:/foo/bar /var/lib/bar
-/usr/bin/vmhgfs-fuse .host:/foo/bar /var/lib/bar -o subtype=vmhgfs-fuse,allow_other
