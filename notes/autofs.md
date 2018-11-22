@@ -1,8 +1,8 @@
-# Mounting cifs directly in home dir
+# Mounting cifs directly in home dir using autofs
 
     sudo apt install cifs-utils autofs
 
-make .smb credentials file
+Make .smb credentials file
 
     cat << EOF >> $HOME/.smb
     username=me
