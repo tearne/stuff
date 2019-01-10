@@ -6,6 +6,7 @@ DEBIAN_FRONTEND=noninteractive
 NOMACHINE=https://download.nomachine.com/download/6.4/Linux/nomachine_6.4.6_1_amd64.deb
 
 sudo apt update \
+&& sudo apt install curl \
 && curl -fSL $NOMACHINE -o /tmp/nomachine.deb \
 && sudo dpkg --install /tmp/nomachine.deb \
 && rm /tmp/*.deb \
@@ -21,8 +22,8 @@ sudo apt update \
 
 #sudo sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
-# Boot to console, not GUI
-#sudo systemctl enable multi-user.target
-#sudo systemctl set-default multi-user.target
+# Boot to console, not GUI (required for free version)
+sudo systemctl enable multi-user.target
+sudo systemctl set-default multi-user.target
 
 sudo /etc/NX/nxserver --startup
