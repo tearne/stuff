@@ -1,0 +1,18 @@
+docker build -t tearne/nomachine:latest -t tearne/nomachine:5.1.54 .
+
+docker run \
+  -p localhost:4000:4000 \
+  --cap-add=SYS_PTRACE \
+  --name nomachine \
+  tearne/nomachine
+
+password can be changed with:
+  docker exec -it nomachine passwd user
+
+Options:
+  --cap-add=SYS_PTRACE    or    --privileged
+  -e PASS=somePassword
+  -v ~/localuser/share:/home/user/share
+
+Then connect with client:
+https://www.nomachine.com/download

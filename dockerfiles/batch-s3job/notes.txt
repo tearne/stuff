@@ -1,0 +1,58 @@
+docker build -t tearne/batch-s3job:0.0.5 .
+
+docker run \
+  -it \
+  --rm \
+  -e JOB_DIR="/cache"
+  -v ~/cache:/cache \
+  tearne/aws-batch \
+    s3://myBucket/myJob \
+    myScript.sh \
+    args1 \
+    args2 \
+    args3 \
+
+
+Example AWS Batch job definition
+{
+    "jobDefinitionName": "wordcount",
+    "jobDefinitionArn": "arn:aws:batch:eu-west-1:123456:job-definition/wordcount:1",
+    "revision": 2,
+    "status": "ACTIVE",
+    "type": "container",
+    "parameters": {},
+    "retryStrategy": {
+        "attempts": 1
+    },
+    "containerProperties": {
+        "image": "123456.dkr.ecr.eu-west-1.amazonaws.com/aws-batch:0.0.5",
+        "vcpus": 1,
+        "memory": 100,
+        "command": [
+            "s3://some-bucket/test-job",
+            "wordcount.sh"
+        ],
+        "volumes": [
+            {
+                "host": {
+                    "sourcePath": "/tmp/cache"
+                },
+                "name": "cache"
+            }
+        ],
+        "environment": [
+            {
+                "name": "JOB_DIR",
+                "value": "/cache"
+            }
+        ],
+        "mountPoints": [
+            {
+                "containerPath": "/cache",
+                "readOnly": false,
+                "sourceVolume": "cache"
+            }
+        ],
+        "ulimits": []
+    }
+}

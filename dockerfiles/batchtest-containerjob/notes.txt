@@ -1,0 +1,1 @@
+docker build -t tearne/batchtest-containerjob:0.0.1 .
