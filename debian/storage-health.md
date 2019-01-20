@@ -82,7 +82,7 @@ Install
 
 Configure `/etc/zfs/zed.d/zed.rc`
 
-* Uncomment 
+* Uncomment (if not already):
 
         ZED_EMAIL_ADDR="root"    
 

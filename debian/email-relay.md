@@ -18,7 +18,7 @@ Create a database from the password file:
 
     postmap hash:/etc/postfix/sasl_passwd
 
-Add/change lines in `/etc/postfix/main/cf`:
+Add/change lines in `/etc/postfix/main.cf`:
 
     # Set gmail as relay
     relayhost = smtp.gmail.com:587
@@ -53,7 +53,7 @@ For some reason it didn't work out of the box.  Run `newaliases` to build `/etc/
 
 Test:
 
-    echo "test message" | mail -s "test subject" me@gmail.com
+    echo "test message" | mail -s "test subject" root
 
 https://forum.proxmox.com/threads/should-root-email-alias-be-configure.48386/
 
