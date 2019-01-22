@@ -1,5 +1,6 @@
 # PVE Firewall
 
+Create new 'proxmox' security group with the following rules to the **Datacenter** firewall and enable.
 
 Security Groups with rules:
 * **Direction**: IN
@@ -21,9 +22,7 @@ One more rule
 * **Source**: 192.168.1.0/24
 * **Dest Port**: 5404:5405 (corosync cluster multicast)
 
-Add new security group to Datacenter firewall and enable.
-
-Enable firewall on node(s) to make rules propagate down.
+Now enable firewall on node(s) to make rules propagate down.
 
 ## Relevant
 

@@ -1,4 +1,4 @@
-docker build -t tearne/lxde:latest -t tearne/lxde:6.2.4 .
+docker build -t tearne/lxde:latest -t tearne/lxde:6.4.6 .
 
 mkdir volume
 
@@ -7,7 +7,7 @@ docker run \
   --privileged \
   --name lxde \
   -e PASS=password \
-  -v $HOME/volume:/home/user/volume \
+  -v $HOME/docker:/home/user/volume \
   tearne/lxde
 
 Options:

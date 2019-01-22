@@ -1,6 +1,6 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:0.11
 
-ENV NOMACHINE http://download.nomachine.com/download/6.2/Linux/nomachine_6.2.4_1_amd64.deb
+ENV NOMACHINE https://download.nomachine.com/download/6.4/Linux/nomachine_6.4.6_1_amd64.deb
 
 EXPOSE 4000
 
@@ -12,7 +12,8 @@ RUN apt update && apt -y upgrade \
         sudo \
         pwgen \
         dialog \
-        lxde-core gksu lxde-common lxterminal lxde-icon-theme notification-daemon \
+        ## gksu gone, see https://itsfoss.com/gksu-replacement-ubuntu/
+        lxde-core lxde-common lxterminal lxde-icon-theme notification-daemon \ 
 &&  curl -fSL $NOMACHINE -o nomachine.deb \
 &&  apt install -y ./nomachine.deb \
 &&  rm *.deb && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
