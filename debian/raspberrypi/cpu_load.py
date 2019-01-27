@@ -23,28 +23,28 @@ def show_graph(cpu):
     i = cpu.idle
 
     # Cumulative
-    ac = u
-    bc = ac + s
-    cc = bc + w
+    ac = s
+    bc = ac + w
+    cc = bc + u
     tot = cc + i
 
     for x in range(nled):
         if x < (ac * norm):
-            r, g, b = 0, 100, 0
+            r, g, b = 30, 0, 0
         elif x < (bc * norm):
-            r, g, b = 150, 100, 0
+            r, g, b = 0, 0, 0
         elif x < (cc * norm):
             r, g, b = 250, 0, 0
         elif x < (tot * norm):
             r, g, b = 0, 0, 0
         else:
-            r, g, b = 100, 0,100
+            r, g, b = 0, 0,0
 
         ledshim.set_pixel(nled - x -1, r, g, b)
     ledshim.show()
 
 
-ledshim.set_brightness(0.5)
+ledshim.set_brightness(1)
 
 while True:
     cpu = psutil.cpu_times_percent()
