@@ -1,4 +1,6 @@
 # Minimal Debian Guest with GUI
+Minimal LXQT install on Debian for virtualisation:
+
     sudo apt-mark hold xscreensaver
 
     sudo apt -y install \
@@ -14,3 +16,7 @@
       tmux \
       firefox-esr
   
+  # NoMachine
+  Verify NoMachine Subscription:
+
+      sudo /etc/NX/nxserver --subscription

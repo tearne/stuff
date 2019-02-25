@@ -34,7 +34,7 @@ Make it start automatically
 
 # Debugging
 
-    sudo service autofs stop
+    sudo systemctl stop autofs
     sudo automount -f -v
 
 
