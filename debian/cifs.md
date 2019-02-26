@@ -1,4 +1,20 @@
-# Mounting cifs directly in home dir using autofs
+
+
+# mount
+
+    sudo apt install cifs-utils
+
+    sudo mount //server/share /mount/point -o username=me,vers=3,uid=me
+
+# fstab
+
+    sudo apt install cifs-utils autofs
+
+In `/etc/fstab`
+
+    //server/share /media/share  cifs credentials=/home/me/.smb,iocharset=utf8,users,uid=me,vers=3.0  0 0
+
+# autofs
 
     sudo apt install cifs-utils autofs
 
@@ -32,7 +48,7 @@ Make it start automatically
     sudo systemctl enable autofs
 
 
-# Debugging
+## Debugging
 
     sudo systemctl stop autofs
     sudo automount -f -v
