@@ -90,17 +90,18 @@ Configure `/etc/zfs/zed.d/zed.rc`
 * Uncomment:
 
         ZED_EMAIL_PROG="mail"
-        ZED_EMAIL_OPTS="-s '@SUBJECT@' @ADDRESS@"
 
 * Set:
 
         ZED_NOTIFY_VERBOSE=1 
         ZED_NOTIFY_DATA=1
 
-Reload service: `systemctl restart zfs-zed`
+Reload service :
 
-### Didn't need to...
-* Enable service: `systemctl enable zfs-zed`
+        systemctl restart zfs-zed`
+
+**Didn't** need to enable service: `systemctl enable zfs-zed`
 
 ### Related
+* https://pve.proxmox.com/wiki/ZFS_on_Linux#_activate_e_mail_notification
 * https://www.reddit.com/r/homelab/comments/8c09pr/guide_to_setting_up_zed_to_email_alerts_for_zfs/

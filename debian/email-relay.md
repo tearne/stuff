@@ -1,5 +1,5 @@
 
-# Email Relay (postfix)
+# Email Relay (postfix) with GMail
 _Tested on Proxmox_
 
 Install the authentication library:
@@ -26,7 +26,7 @@ Add/change lines in `/etc/postfix/main.cf`:
     smtp_use_tls = yes
     smtp_sasl_auth_enable = yes
    
-    # Eliminates default security options which are imcompatible with gmail
+    # Eliminates default security options which are incompatible with gmail
     smtp_sasl_security_options = noanonymous
     smtp_sasl_mechanism_filter = plain
     
@@ -35,11 +35,13 @@ Add/change lines in `/etc/postfix/main.cf`:
 
 Reload config:
 
-    service postfix restart
+    systemctl restart postfix
 
 Test:
 
-    echo "test message" | mail -s "test subject" me@gmail.com
+    echo "test message" | mail -s "test subject" me@somewhere.com
+
+https://forum.proxmox.com/threads/how-to-use-google-apps-smtp-to-email-warnings.38236/
 
 ## Debug
 In `/etc/postfix/main/cf`:
@@ -51,12 +53,11 @@ In `/etc/postfix/main/cf`:
 
 For some reason it didn't work out of the box.  Run `newaliases` to build `/etc/aliases.db`.
 
+    newaliases
+    systemctl restart postfix
+
 Test:
 
     echo "test message" | mail -s "test subject" root
 
 https://forum.proxmox.com/threads/should-root-email-alias-be-configure.48386/
-
-## Related
-* https://forum.proxmox.com/threads/how-to-use-google-apps-smtp-to-email-warnings.38236/
-* https://www.reddit.com/r/homelab/comments/8c09pr/guide_to_setting_up_zed_to_email_alerts_for_zfs/
