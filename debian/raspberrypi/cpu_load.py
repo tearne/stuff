@@ -18,7 +18,7 @@ norm = nled / 100
 
 def show_graph(cpu):
     u = cpu.user + cpu.nice
-    s = cpu.system + cpu.guest + cpu.guest + cpu.guest_nice + cpu.steal
+    s = cpu.system + cpu.guest + cpu.guest_nice + cpu.steal
     w = cpu.iowait + cpu.irq + cpu.softirq
     i = cpu.idle
 
@@ -44,9 +44,24 @@ def show_graph(cpu):
     ledshim.show()
 
 
+
+def buildDiskIO(prevBytes = 0):
+    def diskBytesDelta():
+        def cumulativeBytes():
+            counters = psutil.disk_io_counters()
+            return counters.read_bytes + counters.write_bytes
+
+        old = prevBytes
+        prevBytes = cumulativeBytes()
+        return prevBytes - old
+
+    return diskBytesDelta
+
 ledshim.set_brightness(1)
+bytesThing = buildDiskIO()
 
 while True:
     cpu = psutil.cpu_times_percent()
     show_graph(cpu)
+    print(bytesThing())
     time.sleep(1)
