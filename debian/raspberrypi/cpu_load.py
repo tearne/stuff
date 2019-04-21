@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import time
+import time, random
 from sys import exit
 
 try:
@@ -61,8 +61,14 @@ def buildDiskIO(prevBytes = 0):
 ledshim.set_brightness(1)
 bytesThing = buildDiskIO()
 
+def doIO(bytesMeter = buildDiskIO()):
+    if bytesMeter() > 0:
+        for x in range(nled):
+            ledshim.set_pixel(x, 0, random.randrange(nled), 0)
+        ledshim.show()
+
 while True:
     cpu = psutil.cpu_times_percent()
     show_graph(cpu)
-    print(bytesThing())
+    doIO()
     time.sleep(1)
