@@ -47,6 +47,7 @@ def show_graph(cpu):
 
 def buildDiskIO(prevBytes = 0):
     def diskBytesDelta():
+        nonlocal prevBytes
         def cumulativeBytes():
             counters = psutil.disk_io_counters()
             return counters.read_bytes + counters.write_bytes
