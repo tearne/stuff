@@ -15,8 +15,10 @@ ledshim.set_clear_on_exit()
 nled = ledshim.NUM_PIXELS
 norm = nled / 100
 
+def getCPU():
+    cpu = psutil.cpu_times_percent()
+    arr = [0] * nled
 
-def show_graph(cpu):
     u = cpu.user + cpu.nice
     s = cpu.system + cpu.guest + cpu.guest_nice + cpu.steal
     w = cpu.iowait + cpu.irq + cpu.softirq
@@ -40,9 +42,9 @@ def show_graph(cpu):
         else:
             r, g, b = 0, 0,0
 
-        ledshim.set_pixel(nled - x -1, r, g, b)
-    ledshim.show()
-
+        arr[nled - x -1] = (r, g, b)
+    
+    return arr
 
 
 def buildDiskIO(prevBytes = 0):
@@ -61,14 +63,23 @@ def buildDiskIO(prevBytes = 0):
 ledshim.set_brightness(1)
 bytesThing = buildDiskIO()
 
-def doIO(bytesMeter = buildDiskIO()):
+
+def getIO(bytesMeter = buildDiskIO()):
+    arr = [0] * nled
+
     if bytesMeter() > 0:
         for x in range(nled):
-            ledshim.set_pixel(x, 0, random.randrange(nled), 0)
-        ledshim.show()
+            arr[x] = random.randrange(255)
+    
+    return arr
+
 
 while True:
-    cpu = psutil.cpu_times_percent()
-    show_graph(cpu)
-    doIO()
+    red = getCPU()
+    green = getIO()
+
+    for i in range(nled):
+        ledshim.set_pixel(i, red[i], green[i], 0)
+        ledshim.show()
+    
     time.sleep(1)
