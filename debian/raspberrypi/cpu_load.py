@@ -8,21 +8,75 @@ try:
 except ImportError:
     exit('This script requires the psutil module\nInstall with: sudo pip install psutil')
 
-import ledshim
+#
+# cpu
+# hdd
+# bat
+#
 
-ledshim.set_clear_on_exit()
+# 0123456789012345678901234567
+# 01234567_01234567_1234567890
+# ---bat--_---hdd--_----CPU---
 
-nled = ledshim.NUM_PIXELS
-norm = nled / 100
+class LEDRange:
+    def __init__(self, lower, upper):
+        self.lower = lower
+        self.upper = upper
+        self.width = upper - lower
+        self.range = range(lower, upper + 1)
 
-def getCPU():
+    def toLEDIndex(self, fraction):
+        # print("fraction ", fraction)
+        return self.lower + int(round(self.width * fraction))
+
+class Lights:
+    import ledshim
+
+    def __init__(self):
+        ledshim.set_clear_on_exit()
+        ledshim.set_brightness(1)
+        self.array = [(0,0,0)] * ledshim.NUM_PIXELS
+    
+    def set(self, index, r, g, b):
+        self.array[index] = (r,g,b)
+
+    def drawAndReset(self):
+        for i in range(ledshim.NUM_PIXELS):
+            ledshim.set_pixel(
+                i, 
+                self.array[i][0], 
+                self.array[i][1], 
+                self.array[i][2]
+            )
+            self.array[i] = (0,0,0)
+
+        ledshim.show()
+
+# class DummyLights:
+#     def __init__(self):
+#         self.array = [0] * 28
+    
+#     def set(self, index, r, g, b):
+#         self.array[index] = max(r,g,b)
+
+#     def drawAndReset(self):
+#         print(self.array)
+#         self.array = [0] * 28
+
+
+batLEDRange = LEDRange(0, 7) 
+hddLEDRange = LEDRange(9, 16)
+cpuLEDRange = LEDRange(18, 27)
+
+def doCPU(lights):
     cpu = psutil.cpu_times_percent()
-    arr = [0] * nled
 
     u = cpu.user + cpu.nice
-    s = cpu.system + cpu.guest + cpu.guest_nice + cpu.steal
-    w = cpu.iowait + cpu.irq + cpu.softirq
+    s = cpu.system# + cpu.steal + cpu.guest_nice + cpu.guest
+    w = 0# + cpu.irq + cpu.iowait +  cpu.softirq
     i = cpu.idle
+
+    # print(u, s, w, i)
 
     # Cumulative
     ac = s
@@ -30,56 +84,67 @@ def getCPU():
     cc = bc + u
     tot = cc + i
 
-    for x in range(nled):
-        if x < (ac * norm):
+    aIdx = cpuLEDRange.toLEDIndex(ac / 100)
+    bIdx = cpuLEDRange.toLEDIndex(bc / 100)
+    cIdx = cpuLEDRange.toLEDIndex(cc / 100)
+
+    for x in cpuLEDRange.range:
+        if x <= aIdx:
             r = 30
-        elif x < (bc * norm):
+        elif x <= bIdx:
             r = 0
-        elif x < (cc * norm):
+        elif x <= cIdx:
             r = 250
-        elif x < (tot * norm):
-            r = 0
+        # elif x < (tot * norm):
+        #     r = 0
         else:
             r = 0
 
-        arr[nled - x -1] = r
-    
-    return arr
+        lights.set(x, r, 0, 0)
 
 
-def buildDiskIO(prevBytes = 0):
-    def diskBytesDelta():
-        nonlocal prevBytes
+
+def DiskIOMeter(prevBytes = 0, maxBytesSoFar = 10000):
+    first = True
+
+    def diskPercentage():
+        nonlocal prevBytes, maxBytesSoFar, first
         def cumulativeBytes():
             counters = psutil.disk_io_counters()
             return counters.read_bytes + counters.write_bytes
 
         old = prevBytes
         prevBytes = cumulativeBytes()
-        return prevBytes - old
 
-    return diskBytesDelta
+        delta = prevBytes - old
+        if not first:
+            maxBytesSoFar = max(delta, maxBytesSoFar)
+        
+        first = False
+        
+        fraction = min(prevBytes - old, maxBytesSoFar) / maxBytesSoFar
 
-ledshim.set_brightness(1)
-bytesThing = buildDiskIO()
+        # print("max = ", maxBytes, "  delta = ", delta, "  percentage = ", fraction)
 
+        return fraction
 
-def getIO(bytesMeter = buildDiskIO()):
-    arr = [0] * nled
+    return diskPercentage
 
-    if bytesMeter() > 0:
-        for x in range(nled):
-            arr[x] = random.randrange(255)
-    
-    return arr
+def doIO(lights, ioPercentage):
+    hddPctIdx = hddLEDRange.toLEDIndex(ioPercentage())
+    for i in hddLEDRange.range:
+        if i <= hddPctIdx:
+            lights.set(i, 0, 250, 0)
+        else:
+            lights.set(i, 0, 0, 0)
 
+lights = Lights()
+diskMeter = DiskIOMeter()
 
 while True:
-    red = getCPU()
-    green = getIO()
-
-    for i in range(nled):
-        ledshim.set_pixel(i, red[i], green[i], 0)
-    ledshim.show()
+    doCPU(lights)
+    doIO(lights, diskMeter)
     
-    time.sleep(1)
+    lights.drawAndReset()
+    
+    time.sleep(0.5)
