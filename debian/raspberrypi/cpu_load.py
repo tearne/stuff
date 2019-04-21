@@ -32,17 +32,17 @@ def getCPU():
 
     for x in range(nled):
         if x < (ac * norm):
-            r, g, b = 30, 0, 0
+            r = 30
         elif x < (bc * norm):
-            r, g, b = 0, 0, 0
+            r = 0
         elif x < (cc * norm):
-            r, g, b = 250, 0, 0
+            r = 250
         elif x < (tot * norm):
-            r, g, b = 0, 0, 0
+            r = 0
         else:
-            r, g, b = 0, 0,0
+            r = 0
 
-        arr[nled - x -1] = (r, g, b)
+        arr[nled - x -1] = r
     
     return arr
 
@@ -80,6 +80,6 @@ while True:
 
     for i in range(nled):
         ledshim.set_pixel(i, red[i], green[i], 0)
-        ledshim.show()
+    ledshim.show()
     
     time.sleep(1)
