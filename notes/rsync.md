@@ -8,16 +8,31 @@
 
 # Options
 
+    -a     archive mode; equals -rlptgoD (no -H,-A,-X)
+
     -r     recursive
     -l     copy symlinks as symlinks
+    -p     preserve permissions
+    -t     preserve times
+    -g     preserve group
+    -o     preserve owner (super-user only)
+    -D     preserve device and special files (super-user only)
+
+    -H     preserve hard links
+    -A     preserve ACLs (implies -p)
+    -X     preserve extended attributes
+
+    -t     preserve modification times
+
     -x     this file system only
     -h     human readable
     -P     progress
-    -t     preserve times
+    
     -n     dry run
     -z     compress
     -c     skip based on checksum
-    -i     --itemize-changes   
+    -i     --itemize-changes 
+
     --omit-dir-times
     --exclude
     --delete-excluded

@@ -35,7 +35,11 @@ In container config:
 
     tmux: need UTF-8 locale (LC_CTYPE) but have ANSI_X3.4-1968`)
 
-1. Uncomment `en_GB.UTF-8 UTF-8` in /etc/locale.gen
+1. Uncomment `en_GB.UTF-8 UTF-8` in `/etc/locale.gen`
 2. Set `LANG="en_GB.UTF-8"` in `/etc/default/locale`
 3. Run `locale-gen`
 
+Another way to do the same thing?:
+
+    apt install locales
+    dpkg-reconfigure locales
