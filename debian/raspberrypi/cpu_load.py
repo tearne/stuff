@@ -8,16 +8,6 @@ try:
 except ImportError:
     exit('This script requires the psutil module\nInstall with: sudo pip install psutil')
 
-#
-# cpu
-# hdd
-# bat
-#
-
-# 0123456789012345678901234567
-# 01234567_01234567_1234567890
-# ---bat--_---hdd--_----CPU---
-
 class LEDRange:
     def __init__(self, lower, upper):
         self.lower = lower
@@ -30,8 +20,6 @@ class LEDRange:
         return self.lower + int(round(self.width * fraction))
 
 class Lights:
-    import ledshim
-
     def __init__(self):
         ledshim.set_clear_on_exit()
         ledshim.set_brightness(1)
@@ -52,31 +40,20 @@ class Lights:
 
         ledshim.show()
 
-# class DummyLights:
-#     def __init__(self):
-#         self.array = [0] * 28
-    
-#     def set(self, index, r, g, b):
-#         self.array[index] = max(r,g,b)
+# 0123456789012345678901234567
+# |-bat-||--hdd--||----CPU---|
 
-#     def drawAndReset(self):
-#         print(self.array)
-#         self.array = [0] * 28
-
-
-batLEDRange = LEDRange(0, 7) 
-hddLEDRange = LEDRange(9, 16)
-cpuLEDRange = LEDRange(18, 27)
+batLEDRange = LEDRange(0, 6) 
+hddLEDRange = LEDRange(7, 15)
+cpuLEDRange = LEDRange(16, 27)
 
 def doCPU(lights):
     cpu = psutil.cpu_times_percent()
 
     u = cpu.user + cpu.nice
-    s = cpu.system# + cpu.steal + cpu.guest_nice + cpu.guest
-    w = 0# + cpu.irq + cpu.iowait +  cpu.softirq
+    s = cpu.system + cpu.steal + cpu.guest_nice + cpu.guest
+    w = cpu.irq + cpu.iowait +  cpu.softirq
     i = cpu.idle
-
-    # print(u, s, w, i)
 
     # Cumulative
     ac = s
