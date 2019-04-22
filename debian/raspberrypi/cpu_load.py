@@ -2,6 +2,7 @@
 
 import time, random, subprocess
 from sys import exit
+import ledshim
 
 try:
     import psutil
