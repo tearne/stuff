@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import time, random
+import time, random, subprocess
 from sys import exit
 
 try:
@@ -132,9 +132,25 @@ def DiskIOMeter(prevBytes = 0, maxBytesSoFar = 10000):
 
 def doIO(lights, ioPercentage):
     hddPctIdx = hddLEDRange.toLEDIndex(ioPercentage())
-    for i in hddLEDRange.range:
-        if i <= hddPctIdx:
-            lights.set(i, 0, 250, 0)
+    for i in reversed(hddLEDRange.range):
+        if i < hddPctIdx:
+            lights.set(i, 0, 100, 0)
+        else:
+            lights.set(i, 0, 0, 0)
+
+def doBat(lights):
+    out = subprocess.Popen(["lifepo4wered-cli","get","vbat"], stdout=subprocess.PIPE).communicate()[0]
+    vbat = int(out.splitlines()[0].decode('ascii'))
+
+    vmax = 3600
+    vmin = 2900
+    range = vmax - vmin
+    frac = (vbat - vmin) / range
+    batPctIdx = batLEDRange.toLEDIndex(frac)
+
+    for i in batLEDRange.range:
+        if i <= batPctIdx:
+            lights.set(i, 0, 0, 250)
         else:
             lights.set(i, 0, 0, 0)
 
