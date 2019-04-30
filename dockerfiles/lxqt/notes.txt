@@ -1,0 +1,22 @@
+docker build -t tearne/lxqt:latest -t tearne/lxqt:6.6.8 .
+
+mkdir volume
+
+docker run \
+  -p 127.0.0.1:4000:4000 \
+  --privileged \
+  --name lxde \
+  -e PASS=password \
+  -v $HOME/docker:/home/user/volume \
+  tearne/lxqt
+
+Options:
+  --cap-add=SYS_PTRACE work for NoMachine alone, but chromium wont work.
+  -e PASS=somePassword
+  -v ~/localuser/share:/home/user/share
+
+Password can be changed with:
+    docker exec -it lxde passwd user
+
+Then connect with client:
+https://www.nomachine.com/download
