@@ -50,16 +50,19 @@ RUN apt-get update \
 &&  apt-get install -y --no-install-recommends \
 adwaita-icon-theme \
 dbus dbus-user-session dbus-x11 \
+#
 #   libxmuu1 libxpm4 libxrandr2 libxrender1 libxshmfence1 libxss1 libxt6 \
 #   libxtst6 libxv1 libxvidcore4 libxxf86dga1 libxxf86vm1 libyaml-0-2 libzmq5 \
 #   libzvbi-common libzvbi0 lximage-qt lximage-qt-l10n lxmenu-data lxqt-about \
 #   lxqt-about-l10n lxqt-config lxqt-config-l10n lxqt-core lxqt-globalkeys \
 #   lxqt-globalkeys-l10n lxqt-notificationd lxqt-notificationd-l10n lxqt-panel \
+#
 #   lxqt-panel-l10n lxqt-policykit lxqt-policykit-l10n lxqt-powermanagement \
 #   lxqt-powermanagement-l10n lxqt-qtplugin lxqt-runner lxqt-runner-l10n \
 #   lxqt-session lxqt-session-l10n lxqt-sudo lxqt-sudo-l10n lxqt-system-theme \
 #   lxqt-themes media-player-info mesa-va-drivers mesa-vdpau-drivers miscfiles \
-#   multiarch-support netbase networkd-dispatcher ntfs-3g oxygen-icon-theme \
+  multiarch-support netbase networkd-dispatcher ntfs-3g oxygen-icon-theme \
+#
   p11-kit p11-kit-modules p7zip p7zip-full packagekit packagekit-tools parted \
   pavucontrol-qt pavucontrol-qt-l10n pcmanfm-qt pcmanfm-qt-l10n perl \
   perl-modules-5.26 perl-openssl-defaults pinentry-gnome3 policykit-1 \
