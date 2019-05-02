@@ -110,9 +110,10 @@ def DiskIOMeter(prevBytes = 0, maxBytesSoFar = 10000):
 
 def doIO(lights, ioPercentage):
     hddPctIdx = hddLEDRange.toLEDIndex(ioPercentage())
-    for i in reversed(hddLEDRange.range):
+    ledMax = hddLEDRange.
+    for i in hddLEDRange.range:
         if i < hddPctIdx:
-            lights.set(i, 0, 100, 0)
+            lights.set(i, 0, 50, 0)
         else:
             lights.set(i, 0, 0, 0)
 
@@ -141,4 +142,4 @@ while True:
     
     lights.drawAndReset()
     
-    time.sleep(0.5)
+    time.sleep(1)
