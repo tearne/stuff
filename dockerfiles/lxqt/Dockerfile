@@ -7,77 +7,93 @@ EXPOSE 4000
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update \
-&&  apt -y full-upgrade
-
-RUN  apt install -y --no-install-recommends \
-        curl \
-        sudo \
-        pwgen \
-        dialog \
-        ## gksu gone, see https://itsfoss.com/gksu-replacement-ubuntu/
-        openbox \
-        pcmanfm-qt \
-        featherpad \
-        # qterminal \ 
-        sddm-theme-debian-maui \
-        # xfwm4 \
-        xarchiver \
-        lxqt-qtplugin lxqt-runner lxqt-sudo \
-        lxqt-system-theme lxqt-themes \
-        lximage-qt lxqt-about lxqt-admin \ 
-        lxqt-notificationd lxqt-openssh-askpass lxqt-panel lxqt-policykit \
-        lxqt-config \
-        # lxqt \
-        #git \
-        #x11-utils \
-        #htop \
-        #tmux \
-        #nano \
-        #wget \
-        #nload \
-        #ncdu \
-        #apt-transport-https \
-        ca-certificates \
-        xz-utils \
+&&  apt -y full-upgrade \ 
+&&  apt install -y --no-install-recommends \
+      curl \
+      dialog \
+      lxqt-core \
 &&  curl -fSL $NOMACHINE -o nomachine.deb \
 &&  apt install -y ./nomachine.deb \
 &&  rm *.deb && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN  apt update && apt install -y --no-install-recommends \
+        ## gksu gone, see https://itsfoss.com/gksu-replacement-ubuntu/
+        openbox \
+        # xfwm4 \
+        dbus-x11 \   
+        lxqt-about \
+        lxqt-admin \
+        lxqt-openssh-askpass \
+        qterminal \
+        lxqt-sudo \
+#
+        #sddm-theme-debian-maui \
+        adwaita-icon-theme-full \
+        # oxygen-icon-theme \
+#
+        apt-transport-https \
+        ca-certificates \
+        juffed \
+        xarchiver \
+        lximage-qt \
+        x11-utils \
+        xz-utils \
+        sudo \
+        pwgen \
+        htop \
+        tmux \
+        nano \
+        wget \
+        nload \
+        ncdu \git \
+&&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN mkdir -p /etc/skel/.config/lxqt && \
+    echo '[General]\n\
+__userfile__=true\n\
+icon_theme=Adwaita\n\
+single_click_activate=false\n\
+theme=ambiance\n\
+tool_button_style=ToolButtonTextBesideIcon\n\
+\n\
+[Qt]\n\
+doubleClickInterval=400\n\
+font="Sans,11,-1,5,50,0,0,0,0,0"\n\
+style=Fusion\n\
+wheelScrollLines=3\n\
+' >/etc/skel/.config/lxqt/lxqt.conf && \
+    echo '[General]\n\
+__userfile__=true\n\
+[Environment]\n\
+TERM=qterminal\n\
+' >/etc/skel/.config/lxqt/session.conf
+
+# config pcmanfm-qt
+RUN mkdir -p /etc/skel/.config/pcmanfm-qt/lxqt && \
+    echo '[Desktop]\n\
+ShowHidden=true\n\
+Wallpaper=/usr/share/lxqt/themes/ambiance/Butterfly-Kenneth-Wimer.jpg\n\
+WallpaperMode=stretch\n\
+' >/etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
+
+# config panel / add some launchers
+RUN echo '[quicklaunch]\n\
+alignment=Left\n\
+apps\\1\desktop=/usr/share/applications/pcmanfm-qt.desktop\n\
+apps\\2\desktop=/usr/share/applications/qterminal.desktop\n\
+apps\size=2\n\
+type=quicklaunch\n\
+' >> /etc/xdg/lxqt/panel.conf
+
+# startscript to copy dotfiles from /etc/skel
+# runs either CMD or image command from docker run
+RUN echo '#! /bin/sh\n\
+[ -n "$HOME" ] && [ ! -e "$HOME/.config" ] && cp -R /etc/skel/. $HOME/ \n\
+exec $* \n\
+' > /usr/local/bin/start && chmod +x /usr/local/bin/start 
+
 RUN useradd --create-home --shell /bin/bash user \
 && sudo usermod -aG sudo user
-
-RUN apt-get update \
-&&  apt-get install -y --no-install-recommends \
-adwaita-icon-theme \
-dbus dbus-user-session dbus-x11 \
-#
-#   libxmuu1 libxpm4 libxrandr2 libxrender1 libxshmfence1 libxss1 libxt6 \
-#   libxtst6 libxv1 libxvidcore4 libxxf86dga1 libxxf86vm1 libyaml-0-2 libzmq5 \
-#   libzvbi-common libzvbi0 lximage-qt lximage-qt-l10n lxmenu-data lxqt-about \
-#   lxqt-about-l10n lxqt-config lxqt-config-l10n lxqt-core lxqt-globalkeys \
-#   lxqt-globalkeys-l10n lxqt-notificationd lxqt-notificationd-l10n lxqt-panel \
-#
-#   lxqt-panel-l10n lxqt-policykit lxqt-policykit-l10n lxqt-powermanagement \
-#   lxqt-powermanagement-l10n lxqt-qtplugin lxqt-runner lxqt-runner-l10n \
-#   lxqt-session lxqt-session-l10n lxqt-sudo lxqt-sudo-l10n lxqt-system-theme \
-#   lxqt-themes media-player-info mesa-va-drivers mesa-vdpau-drivers miscfiles \
-  multiarch-support netbase networkd-dispatcher ntfs-3g oxygen-icon-theme \
-#
-  p11-kit p11-kit-modules p7zip p7zip-full packagekit packagekit-tools parted \
-  pavucontrol-qt pavucontrol-qt-l10n pcmanfm-qt pcmanfm-qt-l10n perl \
-  perl-modules-5.26 perl-openssl-defaults pinentry-gnome3 policykit-1 \
-  pulseaudio pulseaudio-utils python-talloc python3-cairo python3-certifi \
-  python3-chardet python3-cups python3-cupshelpers python3-idna \
-  python3-pkg-resources python3-requests python3-six python3-urllib3 \
-  python3-xdg qlipper qps qt5-gtk-platformtheme qt5-image-formats-plugins \
-  qt5-style-plugins qterminal qterminal-l10n qtermwidget5-data \
-  qttranslations5-l10n qtwayland5 rtkit samba-libs shared-mime-info \
-  sound-theme-freedesktop system-config-printer system-config-printer-common \
-  system-config-printer-udev systemd systemd-sysv ubuntu-mono udev udisks2 \
-  unzip upower usbmuxd va-driver-all vdpau-driver-all x11-common x11-utils \
-  x11-xkb-utils x11-xserver-utils xarchiver xdg-utils xkb-data xscreensaver \
-  xscreensaver-data xz-utils \
-&&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 USER user
 

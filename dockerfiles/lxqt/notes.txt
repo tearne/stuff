@@ -5,7 +5,7 @@ mkdir volume
 docker run \
   -p 127.0.0.1:4000:4000 \
   --privileged \
-  --name lxde \
+  --name lxqt \
   -e PASS=password \
   -v $HOME/docker:/home/user/volume \
   tearne/lxqt
@@ -16,7 +16,7 @@ Options:
   -v ~/localuser/share:/home/user/share
 
 Password can be changed with:
-    docker exec -it lxde passwd user
+    docker exec -it lxqt passwd user
 
 Then connect with client:
 https://www.nomachine.com/download
