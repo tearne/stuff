@@ -16,10 +16,13 @@ RUN apt update \
 &&  apt install -y ./nomachine.deb \
 &&  rm *.deb && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN  apt update && apt install -y --no-install-recommends \
+RUN add-apt-repository ppa:papirus/papirus \
+&&  apt update \
+&&  apt install -y --no-install-recommends \
         ## gksu gone, see https://itsfoss.com/gksu-replacement-ubuntu/
         openbox \
-        # xfwm4 \
+        # xfwm4 xfwm4-themes xfwm4-theme-breeze \
+        # kwin-x11 kwin-addons kde-style-breeze kde-style-breeze-qt4 \
         dbus-x11 \   
         lxqt-about \
         lxqt-admin \
@@ -27,8 +30,9 @@ RUN  apt update && apt install -y --no-install-recommends \
         qterminal \
         lxqt-sudo \
 #
-        #sddm-theme-debian-maui \
-        adwaita-icon-theme-full \
+        # sddm-theme-debian-maui \
+        # adwaita-icon-theme-full \
+        papirus-icon-theme \
         # oxygen-icon-theme \
 #
         apt-transport-https \
@@ -45,36 +49,36 @@ RUN  apt update && apt install -y --no-install-recommends \
         nano \
         wget \
         nload \
-        ncdu \git \
+        # ncdu \
+        git \
 &&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN mkdir -p /etc/skel/.config/lxqt && \
-    echo '[General]\n\
-__userfile__=true\n\
-icon_theme=Adwaita\n\
-single_click_activate=false\n\
-theme=ambiance\n\
-tool_button_style=ToolButtonTextBesideIcon\n\
-\n\
-[Qt]\n\
-doubleClickInterval=400\n\
-font="Sans,11,-1,5,50,0,0,0,0,0"\n\
-style=Fusion\n\
-wheelScrollLines=3\n\
-' >/etc/skel/.config/lxqt/lxqt.conf && \
-    echo '[General]\n\
-__userfile__=true\n\
-[Environment]\n\
-TERM=qterminal\n\
-' >/etc/skel/.config/lxqt/session.conf
+# ENV CODEDEB=https://go.microsoft.com/fwlink/?LinkID=760868
+# ADD $CODEDEB code.deb
+# RUN apt-get update && apt-get -y install \
+#     --no-install-recommends \
+#     ./code.deb \
+# #     libgtk2.0-0 \
+# #     libx11-xcb1 \
+# #     libxtst6 \
+# #     libxss1 \
+# #     libasound2 \
+# #     git \
+# #     openssh-server \
+# #     xauth \
+# #     ttf-ubuntu-font-family \
+# #     sudo \
+#  &&  rm -rf code.deb \
+#  &&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# config pcmanfm-qt
-RUN mkdir -p /etc/skel/.config/pcmanfm-qt/lxqt && \
-    echo '[Desktop]\n\
-ShowHidden=true\n\
-Wallpaper=/usr/share/lxqt/themes/ambiance/Butterfly-Kenneth-Wimer.jpg\n\
-WallpaperMode=stretch\n\
-' >/etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg &&\
+    mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg &&\
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
+
+RUN mkdir -p /etc/skel/.config/lxqt
+ADD configs/skel_lxqt.conf /etc/skel/.config/lxqt/lxqt.conf
+ADD configs/skel_session.conf /etc/skel/.config/lxqt/session.conf
+ADD configs/skel_pcmanfm-qt_settings.conf /etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
 
 # config panel / add some launchers
 RUN echo '[quicklaunch]\n\
@@ -91,6 +95,8 @@ RUN echo '#! /bin/sh\n\
 [ -n "$HOME" ] && [ ! -e "$HOME/.config" ] && cp -R /etc/skel/. $HOME/ \n\
 exec $* \n\
 ' > /usr/local/bin/start && chmod +x /usr/local/bin/start 
+
+ADD configs/base_panel.conf /usr/share/lxqt/panel.conf
 
 RUN useradd --create-home --shell /bin/bash user \
 && sudo usermod -aG sudo user
