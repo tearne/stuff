@@ -24,13 +24,12 @@ RUN add-apt-repository ppa:papirus/papirus \
 &&  apt install -y --no-install-recommends \
         # sddm-theme-debian-maui \
         openbox \
-        # xfwm4 xfwm4-themes xfwm4-theme-breeze \
-        # kwin-x11 kwin-addons kde-style-breeze kde-style-breeze-qt4 \
         dbus-x11 \   
         lxqt-about \
         lxqt-admin \
         lxqt-openssh-askpass \
-        qterminal \
+        # qterminal \
+        xfce4-terminal \
         lxqt-sudo \
 #
         # adwaita-icon-theme-full \
@@ -40,13 +39,15 @@ RUN add-apt-repository ppa:papirus/papirus \
         # gksu   -  No longer available, see https://itsfoss.com/gksu-replacement-ubuntu/
         apt-transport-https \
         ca-certificates \
-        x11-utils \
-        xz-utils \
+        # x11-utils \
+        # xz-utils \
         sudo \
         pwgen \
         nano \
         wget \
-        nload \
+        # nload \
+        # glances \
+        # iotop \
         git \
 #
         code \
@@ -55,7 +56,8 @@ RUN add-apt-repository ppa:papirus/papirus \
         htop \
         tmux \
         # lximage-qt \
-        # juffed \
+        featherpad \
+        # qpdf \
         # xarchiver \
 &&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -63,10 +65,11 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > mic
     mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg &&\
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
 
-RUN mkdir -p /etc/skel/.config/lxqt
+RUN mkdir -p /etc/skel/.config/lxqt && mkdir -p /etc/skel/.config/xfce4/terminal
 COPY configs/skel_lxqt.conf /etc/skel/.config/lxqt/lxqt.conf
 COPY configs/skel_session.conf /etc/skel/.config/lxqt/session.conf
 COPY configs/skel_pcmanfm-qt_settings.conf /etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
+COPY configs/skel_terminalrc /etc/skel/.config/xfce4/terminal/terminalrc
 
 COPY configs/xdg_lxqt-rc.xml /etc/xdg/openbox/lxqt-rc.xml
 
