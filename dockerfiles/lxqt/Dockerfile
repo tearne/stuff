@@ -17,9 +17,12 @@ RUN apt update \
 &&  rm *.deb && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN add-apt-repository ppa:papirus/papirus \
+&&  curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
+&&  mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg \
+&&  echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list \
 &&  apt update \
 &&  apt install -y --no-install-recommends \
-        ## gksu gone, see https://itsfoss.com/gksu-replacement-ubuntu/
+        # sddm-theme-debian-maui \
         openbox \
         # xfwm4 xfwm4-themes xfwm4-theme-breeze \
         # kwin-x11 kwin-addons kde-style-breeze kde-style-breeze-qt4 \
@@ -30,64 +33,45 @@ RUN add-apt-repository ppa:papirus/papirus \
         qterminal \
         lxqt-sudo \
 #
-        # sddm-theme-debian-maui \
         # adwaita-icon-theme-full \
         papirus-icon-theme \
         # oxygen-icon-theme \
 #
+        # gksu   -  No longer available, see https://itsfoss.com/gksu-replacement-ubuntu/
         apt-transport-https \
         ca-certificates \
-        juffed \
-        xarchiver \
-        lximage-qt \
         x11-utils \
         xz-utils \
         sudo \
         pwgen \
-        htop \
-        tmux \
         nano \
         wget \
         nload \
-        # ncdu \
         git \
+#
+        code \
+        firefox \
+        ncdu \
+        htop \
+        tmux \
+        # lximage-qt \
+        # juffed \
+        # xarchiver \
 &&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# ENV CODEDEB=https://go.microsoft.com/fwlink/?LinkID=760868
-# ADD $CODEDEB code.deb
-# RUN apt-get update && apt-get -y install \
-#     --no-install-recommends \
-#     ./code.deb \
-# #     libgtk2.0-0 \
-# #     libx11-xcb1 \
-# #     libxtst6 \
-# #     libxss1 \
-# #     libasound2 \
-# #     git \
-# #     openssh-server \
-# #     xauth \
-# #     ttf-ubuntu-font-family \
-# #     sudo \
-#  &&  rm -rf code.deb \
-#  &&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg &&\
     mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg &&\
     echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
 
 RUN mkdir -p /etc/skel/.config/lxqt
-ADD configs/skel_lxqt.conf /etc/skel/.config/lxqt/lxqt.conf
-ADD configs/skel_session.conf /etc/skel/.config/lxqt/session.conf
-ADD configs/skel_pcmanfm-qt_settings.conf /etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
+COPY configs/skel_lxqt.conf /etc/skel/.config/lxqt/lxqt.conf
+COPY configs/skel_session.conf /etc/skel/.config/lxqt/session.conf
+COPY configs/skel_pcmanfm-qt_settings.conf /etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
 
-# config panel / add some launchers
-RUN echo '[quicklaunch]\n\
-alignment=Left\n\
-apps\\1\desktop=/usr/share/applications/pcmanfm-qt.desktop\n\
-apps\\2\desktop=/usr/share/applications/qterminal.desktop\n\
-apps\size=2\n\
-type=quicklaunch\n\
-' >> /etc/xdg/lxqt/panel.conf
+COPY configs/xdg_lxqt-rc.xml /etc/xdg/openbox/lxqt-rc.xml
+
+COPY configs/xdg_panel.conf.append /tmp/
+RUN  cat /tmp/xdg_panel.conf.append >> /etc/xdg/lxqt/panel.conf  && rm -f /tmp/xgd_panel.conf.append
 
 # startscript to copy dotfiles from /etc/skel
 # runs either CMD or image command from docker run
