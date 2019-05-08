@@ -11,7 +11,7 @@ docker run \
   tearne/lxqt
 
 Options:
-  --cap-add=SYS_PTRACE work for NoMachine alone, but chromium wont work.
+  --cap-add=SYS_PTRACE works for NoMachine, but chromium wont work.
   -e PASS=somePassword
   -v ~/localuser/share:/home/user/share
 
@@ -20,3 +20,10 @@ Password can be changed with:
 
 Then connect with client:
 https://www.nomachine.com/download
+
+
+
+image -> container -> export -> import
+docker run --name lxqt --entrypoint bash tearne/lxqt
+docker export lxqt | gzip > lxqt.tar
+docker import lxqt.tar lxqt-imported
