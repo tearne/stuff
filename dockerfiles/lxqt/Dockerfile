@@ -1,6 +1,6 @@
 FROM phusion/baseimage:0.11
 
-ENV NOMACHINE https://download.nomachine.com/download/6.6/Linux/nomachine_6.6.8_5_amd64.deb
+ENV NOMACHINE https://download.nomachine.com/download/6.7/Linux/nomachine_6.7.6_11_amd64.deb
 
 EXPOSE 4000
 
@@ -48,6 +48,7 @@ RUN add-apt-repository ppa:papirus/papirus \
         # nload \
         # glances \
         # iotop \
+        # nmon \
         git \
 #
         # code \
