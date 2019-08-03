@@ -1,4 +1,4 @@
-docker build -t tearne/lxqt:latest -t tearne/lxqt:6.6.8 .
+docker build -t tearne/lxqt:latest -t tearne/lxqt:6.7.6 .
 
 mkdir volume
 

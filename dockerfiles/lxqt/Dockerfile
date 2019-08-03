@@ -1,6 +1,6 @@
-FROM phusion/baseimage:0.11
+ FROM phusion/baseimage:0.11
 
-ENV NOMACHINE https://download.nomachine.com/download/6.6/Linux/nomachine_6.6.8_5_amd64.deb
+ENV NOMACHINE https://download.nomachine.com/download/6.7/Linux/nomachine_6.7.6_11_amd64.deb
 
 EXPOSE 4000
 
@@ -45,9 +45,6 @@ RUN add-apt-repository ppa:papirus/papirus \
         pwgen \
         nano \
         # wget \
-        # nload \
-        # glances \
-        # iotop \
         git \
 #
         # code \
@@ -55,30 +52,26 @@ RUN add-apt-repository ppa:papirus/papirus \
         ncdu \
         htop \
         tmux \
+        nload \
+        # glances \
+        # iotop \
+        # qdirstat \
         # lximage-qt \
         featherpad \
         # qpdf \
         # xarchiver \
 &&  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN mkdir -p /etc/skel/.config/lxqt && mkdir -p /etc/skel/.config/xfce4/terminal
-COPY config/skel_lxqt.conf /etc/skel/.config/lxqt/lxqt.conf
-COPY config/skel_session.conf /etc/skel/.config/lxqt/session.conf
-COPY config/skel_pcmanfm-qt_settings.conf /etc/skel/.config/pcmanfm-qt/lxqt/settings.conf
-COPY config/skel_terminalrc /etc/skel/.config/xfce4/terminal/terminalrc
+RUN mkdir -p /etc/xdg/lxqt \
+&&  mkdir -p /etc/xdg/xfce4/terminal \
+&&  mkdir -p /etc/xdg/pcmanfm-qt/lxqt
 
-# startscript to copy dotfiles from /etc/skel
-RUN echo '#! /bin/sh\n\
-[ -n "$HOME" ] && [ ! -e "$HOME/.config" ] && cp -R /etc/skel/. $HOME/ \n\
-exec $* \n\
-' > /usr/local/bin/start && chmod +x /usr/local/bin/start 
-
-COPY config/xdg_lxqt-rc.xml /etc/xdg/openbox/lxqt-rc.xml
-
-COPY config/xdg_panel.conf.append /tmp/
-RUN  cat /tmp/xdg_panel.conf.append >> /etc/xdg/lxqt/panel.conf  && rm -f /tmp/xgd_panel.conf.append
-
-COPY config/base_panel.conf /usr/share/lxqt/panel.conf
+COPY config/lxqt.conf /etc/xdg/lxqt/lxqt.conf
+COPY config/session.conf /etc/xdg/lxqt/session.conf
+COPY config/panel.conf  /etc/xdg/lxqt/panel.conf
+COPY config/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
+COPY config/terminalrc /etc/xdg/xfce4/terminal/terminalrc
+COPY config/openbox_lxqt-rc.xml /etc/xdg/openbox/lxqt-rc.xml
 
 RUN useradd --create-home --shell /bin/bash user \
 && sudo usermod -aG sudo user
