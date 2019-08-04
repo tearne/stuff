@@ -71,7 +71,11 @@ COPY config/session.conf /etc/xdg/lxqt/session.conf
 COPY config/panel.conf  /etc/xdg/lxqt/panel.conf
 COPY config/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
 COPY config/terminalrc /etc/xdg/xfce4/terminal/terminalrc
-COPY config/openbox_lxqt-rc.xml /etc/xdg/openbox/lxqt-rc.xml
+
+COPY config/setOneDesktop.py /tmp/oneDesk.py
+RUN chmod +x /tmp/oneDesk.py \
+&&  /tmp/oneDesk.py \
+&&  rm /tmp/oneDesk.py
 
 RUN useradd --create-home --shell /bin/bash user \
 && sudo usermod -aG sudo user
