@@ -1,19 +1,16 @@
 FROM phusion/baseimage:0.11 as build
 
 ENV NOMACHINE https://download.nomachine.com/download/6.7/Linux/nomachine_6.7.6_11_amd64.deb
+ENV DEBIAN_FRONTEND noninteractive
 
 EXPOSE 4000
 
-ENV DEBIAN_FRONTEND noninteractive
-
 RUN add-apt-repository ppa:papirus/papirus \
 &&  apt update \
-&&  apt -y full-upgrade
-
-RUN apt install -y --no-install-recommends \
+&&  apt -y full-upgrade \
+&&  apt install -y --no-install-recommends \
         curl \
         lxqt-core \        
-        # sddm-theme-debian-maui \
         openbox \
         dbus-x11 \   
         lxqt-about \
@@ -24,15 +21,8 @@ RUN apt install -y --no-install-recommends \
         lxqt-sudo \
         papirus-icon-theme \
         # oxygen-icon-theme \
-        # --== Notice below suppressed ==--
-        adwaita-icon-theme-
-
-RUN curl -fSL $NOMACHINE -o nomachine.deb \
-&&  apt install -y ./nomachine.deb
-
-RUN  apt install -y --no-install-recommends \
-        # gksu   -  No longer available, see https://itsfoss.com/gksu-replacement-ubuntu/
-        # dialog \
+        # --== adwaita-icon-theme suppressed by "-" at end ==--
+        adwaita-icon-theme- \
         apt-transport-https \
         ca-certificates \
         # x11-utils \
@@ -40,7 +30,6 @@ RUN  apt install -y --no-install-recommends \
         sudo \
         pwgen \
         nano \
-        # wget \
         git \
         firefox \
         ncdu \
@@ -53,17 +42,17 @@ RUN  apt install -y --no-install-recommends \
         # lximage-qt \
         # qpdf \
         # xarchiver \
-        featherpad 
+        featherpad \
+&&  curl -fSL $NOMACHINE -o nomachine.deb \
+&&  apt install -y ./nomachine.deb \
+&&  rm *.deb && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg \
 # &&  mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg \
 # &&  echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
 # &&  apt install -y --no-install-recommends code
 
-RUN mkdir -p /etc/xdg/lxqt \
-&&  mkdir -p /etc/xdg/xfce4/terminal \
-&&  mkdir -p /etc/xdg/pcmanfm-qt/lxqt
-
+RUN mkdir -p /etc/xdg/lxqt /etc/xdg/xfce4/terminal /etc/xdg/pcmanfm-qt/lxqt
 COPY config/lxqt.conf /etc/xdg/lxqt/lxqt.conf
 COPY config/session.conf /etc/xdg/lxqt/session.conf
 COPY config/panel.conf  /etc/xdg/lxqt/panel.conf
@@ -89,11 +78,6 @@ USER root
 
 COPY script/run.sh run.sh
 RUN chmod +x run.sh
-
-RUN rm *.deb && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-FROM scratch
-COPY --from=build / /
 
 ENTRYPOINT ["/sbin/my_init"]
 CMD ["--", "./run.sh"]
