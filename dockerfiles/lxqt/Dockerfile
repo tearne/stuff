@@ -7,6 +7,7 @@ EXPOSE 4000
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN add-apt-repository ppa:papirus/papirus \
+&&  add-apt-repository ppa:ubuntu-desktop/ubuntu-make \
 &&  apt update \
 &&  apt -y full-upgrade
 
