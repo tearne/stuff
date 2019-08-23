@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import time, random, subprocess
 from sys import exit
@@ -45,15 +45,15 @@ class Lights:
 # |-bat-||--hdd--||----CPU---|
 
 batLEDRange = LEDRange(0, 6) 
-hddLEDRange = LEDRange(7, 15)
-cpuLEDRange = LEDRange(16, 27)
+hddLEDRange = LEDRange(7, 10)
+cpuLEDRange = LEDRange(11, 27)
 
 def doCPU(lights):
     cpu = psutil.cpu_times_percent()
 
-    u = cpu.user + cpu.nice
     s = cpu.system + cpu.steal + cpu.guest_nice + cpu.guest
     w = cpu.irq + cpu.iowait +  cpu.softirq
+    u = cpu.user + cpu.nice
     i = cpu.idle
 
     # Cumulative
@@ -68,17 +68,15 @@ def doCPU(lights):
 
     for x in cpuLEDRange.range:
         if x <= aIdx:
-            r = 30
+            lights.set(x, 100, 0, 0)
         elif x <= bIdx:
-            r = 0
+            lights.set(x, 0, 0, 100)
         elif x <= cIdx:
-            r = 250
+            lights.set(x, 50, 150, 0)
         # elif x < (tot * norm):
         #     r = 0
         else:
-            r = 0
-
-        lights.set(x, r, 0, 0)
+            r = lights.set(x, 0, 0, 0)
 
 
 
@@ -109,29 +107,35 @@ def DiskIOMeter(prevBytes = 0, maxBytesSoFar = 10000):
     return diskPercentage
 
 def doIO(lights, ioPercentage):
-    hddPctIdx = hddLEDRange.toLEDIndex(ioPercentage())
-    ledMax = hddLEDRange.
-    for i in hddLEDRange.range:
-        if i < hddPctIdx:
-            lights.set(i, 0, 50, 0)
-        else:
-            lights.set(i, 0, 0, 0)
+    # hddPctIdx = hddLEDRange.toLEDIndex(ioPercentage())
+    # for i in hddLEDRange.range:
+    #     if i < hddPctIdx:
+    #         lights.set(i, 0, 50, 0)
+    #     else:
+    #         lights.set(i, 0, 0, 0)
+    if(ioPercentage() > 0):
+        for i in hddLEDRange.range:
+            lights.set(i, 100, 100, 100)
 
 def doBat(lights):
     out = subprocess.Popen(["lifepo4wered-cli","get","vbat"], stdout=subprocess.PIPE).communicate()[0]
     vbat = int(out.splitlines()[0].decode('ascii'))
 
-    vmax = 3600
-    vmin = 2900
+    vmax = 3300
+    vmin = 2960
     range = vmax - vmin
-    frac = (vbat - vmin) / range
+    frac = min((vbat - vmin) / range, 1)
     batPctIdx = batLEDRange.toLEDIndex(frac)
 
-    for i in batLEDRange.range:
-        if i <= batPctIdx:
-            lights.set(i, 0, 0, 250)
-        else:
-            lights.set(i, 0, 0, 0)
+    if(vbat > vmax):
+        for i in batLEDRange.range:
+            lights.set(i, 0, 100, 100)
+    else:
+        for i in batLEDRange.range:
+            if i <= batPctIdx:
+                lights.set(i, 0, 0, 250)
+            else:
+                lights.set(i, 250, 0, 100)
 
 lights = Lights()
 diskMeter = DiskIOMeter()
@@ -139,6 +143,7 @@ diskMeter = DiskIOMeter()
 while True:
     doCPU(lights)
     doIO(lights, diskMeter)
+    doBat(lights)
     
     lights.drawAndReset()
     
