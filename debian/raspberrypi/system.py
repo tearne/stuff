@@ -42,8 +42,8 @@ class Lights:
 
         ledshim.show()
 
-batLEDRange = LEDRange(0, 6) 
-cpuLEDRange = LEDRange(7, 25)
+batLEDRange = LEDRange(0, 4) 
+cpuLEDRange = LEDRange(5, 25)
 netLEDRange = LEDRange(26, 26)
 hddLEDRange = LEDRange(27, 27)
 
@@ -95,7 +95,7 @@ def DiskMeter(prevBytes = 0):
 def doDisk(lights, diskActive):
     if(diskActive() > 0):
         for i in hddLEDRange.range:
-            lights.set(i, 100, 80, 0)
+            lights.set(i, 200, 160, 0)
 
 def NetMeter(prevBytes = 0):
     def isActive():
@@ -114,7 +114,7 @@ def NetMeter(prevBytes = 0):
 def doNet(lights, netActive):
     if(netActive() > 0):
         for i in netLEDRange.range:
-            lights.set(i, 80, 0, 120)
+            lights.set(i, 160, 0, 220)
 
 def doBat(lights):
     out = subprocess.Popen(["lifepo4wered-cli","get","vbat"], stdout=subprocess.PIPE).communicate()[0]
