@@ -43,8 +43,10 @@ class Lights:
         ledshim.show()
 
 batLEDRange = LEDRange(0, 6) 
-hddLEDRange = LEDRange(7, 8)
-cpuLEDRange = LEDRange(9, 27)
+cpuLEDRange = LEDRange(7, 25)
+netLEDRange = LEDRange(26, 26)
+hddLEDRange = LEDRange(27, 27)
+
 
 def doCPU(lights):
     cpu = psutil.cpu_times_percent()
@@ -76,7 +78,7 @@ def doCPU(lights):
 
 
 
-def DiskIOMeter(prevBytes = 0):
+def DiskMeter(prevBytes = 0):
     def isActive():
         nonlocal prevBytes
         old = prevBytes
@@ -90,12 +92,29 @@ def DiskIOMeter(prevBytes = 0):
 
     return isActive
 
-
-def doIO(lights, diskActive):
+def doDisk(lights, diskActive):
     if(diskActive() > 0):
         for i in hddLEDRange.range:
-            lights.set(i, 100, 100, 100)
+            lights.set(i, 100, 80, 0)
 
+def NetMeter(prevBytes = 0):
+    def isActive():
+        nonlocal prevBytes
+        old = prevBytes
+
+        counters = psutil.net_io_counters()
+        prevBytes = counters.bytes_sent + counters.bytes_recv
+
+        diff = prevBytes - old
+
+        return diff > 1024
+
+    return isActive
+
+def doNet(lights, netActive):
+    if(netActive() > 0):
+        for i in netLEDRange.range:
+            lights.set(i, 80, 0, 120)
 
 def doBat(lights):
     out = subprocess.Popen(["lifepo4wered-cli","get","vbat"], stdout=subprocess.PIPE).communicate()[0]
@@ -109,20 +128,22 @@ def doBat(lights):
 
     if(vbat > vmax):
         for i in batLEDRange.range:
-            lights.set(i, 0, 50, 40)
+            lights.set(i, 0, 30, 20)
     else:
         for i in batLEDRange.range:
             if i <= batPctIdx:
-                lights.set(i, 0, 0, 250)
+                lights.set(i, 0, 0, 150)
             else:
-                lights.set(i, 250, 0, 100)
+                lights.set(i, 150, 0, 100)
 
 lights = Lights()
-diskMeter = DiskIOMeter()
+diskMeter = DiskMeter()
+netMeter = NetMeter()
 
 while True:
     doCPU(lights)
-    doIO(lights, diskMeter)
+    doDisk(lights, diskMeter)
+    doNet(lights, netMeter)
     doBat(lights)
     
     lights.drawAndReset()
