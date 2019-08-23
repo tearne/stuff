@@ -42,4 +42,4 @@ def doCPU():
 
 while True:
     doCPU()
-    time.sleep(0.5)
+    time.sleep(1)

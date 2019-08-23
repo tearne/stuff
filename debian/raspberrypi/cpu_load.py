@@ -31,22 +31,20 @@ class Lights:
 
     def drawAndReset(self):
         for i in range(ledshim.NUM_PIXELS):
+            j = ledshim.NUM_PIXELS - i - 1
             ledshim.set_pixel(
                 i, 
-                self.array[i][0], 
-                self.array[i][1], 
-                self.array[i][2]
+                self.array[j][0], 
+                self.array[j][1], 
+                self.array[j][2]
             )
-            self.array[i] = (0,0,0)
+            self.array[j] = (0,0,0)
 
         ledshim.show()
 
-# 0123456789012345678901234567
-# |-bat-||--hdd--||----CPU---|
-
 batLEDRange = LEDRange(0, 6) 
-hddLEDRange = LEDRange(7, 10)
-cpuLEDRange = LEDRange(11, 27)
+hddLEDRange = LEDRange(7, 8)
+cpuLEDRange = LEDRange(9, 27)
 
 def doCPU(lights):
     cpu = psutil.cpu_times_percent()
@@ -68,68 +66,50 @@ def doCPU(lights):
 
     for x in cpuLEDRange.range:
         if x <= aIdx:
-            lights.set(x, 100, 0, 0)
+            lights.set(x, 150, 0, 0)
         elif x <= bIdx:
-            lights.set(x, 0, 0, 100)
+            lights.set(x, 0, 0, 250)
         elif x <= cIdx:
-            lights.set(x, 50, 150, 0)
-        # elif x < (tot * norm):
-        #     r = 0
+            lights.set(x, 40, 130, 0)
         else:
-            r = lights.set(x, 0, 0, 0)
+            lights.set(x, 0, 0, 0)
 
 
 
-def DiskIOMeter(prevBytes = 0, maxBytesSoFar = 10000):
-    first = True
-
-    def diskPercentage():
-        nonlocal prevBytes, maxBytesSoFar, first
-        def cumulativeBytes():
-            counters = psutil.disk_io_counters()
-            return counters.read_bytes + counters.write_bytes
-
+def DiskIOMeter(prevBytes = 0):
+    def isActive():
+        nonlocal prevBytes
         old = prevBytes
-        prevBytes = cumulativeBytes()
 
-        delta = prevBytes - old
-        if not first:
-            maxBytesSoFar = max(delta, maxBytesSoFar)
-        
-        first = False
-        
-        fraction = min(prevBytes - old, maxBytesSoFar) / maxBytesSoFar
+        counters = psutil.disk_io_counters()
+        prevBytes = counters.read_bytes + counters.write_bytes
 
-        # print("max = ", maxBytes, "  delta = ", delta, "  percentage = ", fraction)
+        diff = prevBytes - old
 
-        return fraction
+        return diff > 0
 
-    return diskPercentage
+    return isActive
 
-def doIO(lights, ioPercentage):
-    # hddPctIdx = hddLEDRange.toLEDIndex(ioPercentage())
-    # for i in hddLEDRange.range:
-    #     if i < hddPctIdx:
-    #         lights.set(i, 0, 50, 0)
-    #     else:
-    #         lights.set(i, 0, 0, 0)
-    if(ioPercentage() > 0):
+
+def doIO(lights, diskActive):
+    if(diskActive() > 0):
         for i in hddLEDRange.range:
             lights.set(i, 100, 100, 100)
+
 
 def doBat(lights):
     out = subprocess.Popen(["lifepo4wered-cli","get","vbat"], stdout=subprocess.PIPE).communicate()[0]
     vbat = int(out.splitlines()[0].decode('ascii'))
 
     vmax = 3300
-    vmin = 2960
+    vmin = 3100
     range = vmax - vmin
     frac = min((vbat - vmin) / range, 1)
     batPctIdx = batLEDRange.toLEDIndex(frac)
 
     if(vbat > vmax):
         for i in batLEDRange.range:
-            lights.set(i, 0, 100, 100)
+            lights.set(i, 0, 50, 40)
     else:
         for i in batLEDRange.range:
             if i <= batPctIdx:
