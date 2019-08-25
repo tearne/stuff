@@ -9,6 +9,22 @@ try:
 except ImportError:
     exit('This script requires the psutil module\nInstall with: sudo pip install psutil')
 
+def configButtons():
+    buttonshim.set_pixel(0x00, 0x00, 0x00)
+    @buttonshim.on_press(buttonshim.BUTTON_A)
+    def button_a(button, pressed):
+        ledshim.set_brightness(0.3)
+
+    @buttonshim.on_press(buttonshim.BUTTON_B)
+    def button_b(button, pressed):
+        ledshim.set_brightness(1)
+    
+try:
+    import buttonshim
+    configButtons()
+except ImportError:
+    print("ButtonSHIM not installed, ignoring.")
+
 class LEDRange:
     def __init__(self, lower, upper):
         self.lower = lower
@@ -128,7 +144,7 @@ def doBat(lights):
 
     if(vbat > vmax):
         for i in batLEDRange.range:
-            lights.set(i, 0, 30, 20)
+            lights.set(i, 30, 40, 0)
     else:
         for i in batLEDRange.range:
             if i <= batPctIdx:
@@ -139,6 +155,8 @@ def doBat(lights):
 lights = Lights()
 diskMeter = DiskMeter()
 netMeter = NetMeter()
+
+
 
 while True:
     doCPU(lights)
