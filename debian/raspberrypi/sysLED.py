@@ -144,7 +144,7 @@ def doBat(lights):
 
     if(vbat > vmax):
         for i in batLEDRange.range:
-            lights.set(i, 30, 40, 0)
+            lights.set(i, 40, 40, 0)
     else:
         for i in batLEDRange.range:
             if i <= batPctIdx:
