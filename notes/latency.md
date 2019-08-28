@@ -18,3 +18,4 @@ https://www.professormesser.com/nmap/hacking-nmap-using-nmap-to-calculate-networ
 `nmap -p80 --oX - www.google.com`
 
 * `curl -w %{time_connect}\\n -o /dev/null -s https://dynamodb.eu-west-2.amazonaws.com/`
+* `httping -S -Y -g google.com` add `-K` for ncurses
