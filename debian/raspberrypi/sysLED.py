@@ -13,7 +13,7 @@ def configButtons():
     buttonshim.set_pixel(0x00, 0x00, 0x00)
     @buttonshim.on_press(buttonshim.BUTTON_A)
     def button_a(button, pressed):
-        ledshim.set_brightness(0.3)
+        ledshim.set_brightness(1)
 
     @buttonshim.on_press(buttonshim.BUTTON_B)
     def button_b(button, pressed):
