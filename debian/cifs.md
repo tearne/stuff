@@ -38,6 +38,7 @@ Make `~/.autofs` in home directory
     cat << EOF >> $HOME/.autofs
     $HOME/share -fstype=cifs,rw,uid=$USER,credentials=$HOME/.smb,file_mode=0770,dir_mode=0770,vers=3.0 ://server/share
     EOF
+    chmod 0600 $HOME/.autofs
 
 Restart autofs
     
