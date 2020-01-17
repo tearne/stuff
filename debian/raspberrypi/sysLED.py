@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# https://github.com/pimoroni/led-shim
+# pip3 install --user --upgrade ledshim psutil buttonshim
+# sudo apt install python3-smbus python3-numpy
+
 import time, random, subprocess
 from sys import exit
 import ledshim
