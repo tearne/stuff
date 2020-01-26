@@ -6,7 +6,7 @@ DEBIAN_FRONTEND=noninteractive
 sudo apt update
 
 function apt-if-needed {
-    if ! which $! &> /dev/null; then
+    if ! type $1 &> /dev/null ; then
         sudo apt install -y $1
     fi
 }
