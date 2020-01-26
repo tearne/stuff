@@ -41,7 +41,7 @@ function dist-check
 
 function core-packages
 {
-    sudo add-apt-repository -y ppa:papirus/papirus && apt update
+    sudo add-apt-repository -y ppa:papirus/papirus && sudo apt update
     sudo apt install -y --no-install-recommends \
         lxqt-core \
         dbus-x11 \
