@@ -18,6 +18,11 @@ function smartgit {
     wget https://www.syntevo.com/downloads/smartgit/smartgit-$VERSION.deb -O /tmp/smartgit.deb
     sudo apt install /tmp/smartgit.deb
     rm /tmp/smartgit.deb
+
+    mkdir -p $HOME/.local/bin
+    ln -s /usr/share/smartgit/bin/smartgit.sh $HOME/.local/bin/smartgit
+    source $HOME/.profile
+
 }
 
 smartgit
