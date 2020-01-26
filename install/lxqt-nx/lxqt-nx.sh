@@ -150,5 +150,3 @@ core-packages # Always run first, it does an apt update
 user-packages
 config
 nomachine
-
-tail -f /usr/NX/var/log/nxserver.log
