@@ -3,8 +3,17 @@
 set -e
 DEBIAN_FRONTEND=noninteractive
 
-function install-sdk(){
-    sudo apt install -y zip unzip
+sudo apt update
+
+function apt-if-needed {
+    if ! which $! &> /dev/null; then
+        sudo apt install -y $1
+    fi
+}
+
+function install-sdk {
+    apt-if-needed zip
+    apt-if-needed unzip
     curl -s "https://get.sdkman.io" | bash
     source "$HOME/.sdkman/bin/sdkman-init.sh"
 
@@ -14,11 +23,11 @@ function install-sdk(){
 install-sdk
 ######################################################
 
-sudo apt install -y snapd
+apt-if-needed snapd
 sudo snap install intellij-idea-community --classic
 ######################################################
 
-function save-alias() {
+function save-alias {
     # https://unix.stackexchange.com/questions/153977/automatically-put-an-alias-into-bashrc-or-zshrc
 
     ALIAS_NAME=`echo "$1" | grep -o ".*="`
@@ -38,15 +47,16 @@ function save-alias() {
 }
 ######################################################
 
-function install-smartgit() {
-    sudo apt install -y flatpak
-    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    sudo flatpak install -y flathub com.syntevo.SmartGit
+function install-smartgit {
+    apt-if-needed flatpak
+    flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    flatpak --user install -y flathub com.syntevo.SmartGit
 
     save-alias 'smartgit=flatpak run com.syntevo.SmartGit'
-    echo "##########################"
-    echo "source $HOME/.bashrc or open new terminal"
-    echo "##########################"
+    echo "##############################################################"
+    echo "source $HOME/.bashrc or open new terminal to update aliases"
+    echo "You may need to reboot to make the icon to appear in the menu"
+    echo "###############################################################"
 }
 install-smartgit
 ######################################################
