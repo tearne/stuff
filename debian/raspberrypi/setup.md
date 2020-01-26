@@ -27,3 +27,8 @@ If not rebooting:
 
 # SSH
 Enable ssh by creating `ssh` file in `/boot`, or, when running `sudo systemctl enable ssh`, and `sudo systemctl start ssh`.
+
+# Unicorn hat hd setup
+
+* sudo apt install python3-pip python3-numpy
+* pip3 install --user unicornhathd
