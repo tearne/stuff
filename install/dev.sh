@@ -9,20 +9,19 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install java
 sdk install sbt
 
-sudo apt install snapd
+sudo apt install -y snapd
 sudo snap install intellij-idea-community --classic
 
 function smartgit {
     VERSION=19_1_6
 
     wget https://www.syntevo.com/downloads/smartgit/smartgit-$VERSION.deb -O /tmp/smartgit.deb
-    sudo apt install /tmp/smartgit.deb
+    sudo apt install -y /tmp/smartgit.deb
     rm /tmp/smartgit.deb
 
     mkdir -p $HOME/.local/bin
     ln -s /usr/share/smartgit/bin/smartgit.sh $HOME/.local/bin/smartgit
     source $HOME/.profile
-
 }
 
 smartgit
