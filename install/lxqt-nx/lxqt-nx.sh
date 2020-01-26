@@ -3,8 +3,6 @@
 set -e
 DEBIAN_FRONTEND=noninteractive
 
-
-
 function set-wd
 {
     SOURCE="${BASH_SOURCE[0]}"
@@ -31,20 +29,20 @@ function dist-check
 ######################################################
 
 
-function sudo-check
-{
-    if [ "$EUID" -ne 0 ]
-        then echo "Please run script using sudo or as root."
-        exit
-    fi
-}
+# function sudo-check
+# {
+#     if [ "$EUID" -ne 0 ]
+#         then echo "Please run script using sudo or as root."
+#         exit
+#     fi
+# }
 ######################################################
 
 
 function core-packages
 {
-    add-apt-repository -y ppa:papirus/papirus && apt update
-    apt install -y --no-install-recommends \
+    sudo add-apt-repository -y ppa:papirus/papirus && apt update
+    sudo apt install -y --no-install-recommends \
         lxqt-core \
         dbus-x11 \
         openbox \
@@ -61,7 +59,7 @@ function core-packages
 
 function user-packages
 {
-    apt install -y --no-install-recommends \
+    sudo apt install -y --no-install-recommends \
         x11-utils \
         xz-utils \
         nano \
@@ -81,7 +79,9 @@ function user-packages
         snapd \
         qpdf \
         qdirstat \
-        xarchiver
+        xarchiver \
+        unzip \ # sdkman
+        zip     # sdkman
 
     #apt install -y --no-install-recommends snapd
     #snap install --classic code
@@ -91,39 +91,38 @@ function user-packages
 
 function config
 {
-    mkdir -p /etc/xdg/lxqt
-    cp config_files/lxqt.conf /etc/xdg/lxqt/lxqt.conf
-    cp config_files/session.conf /etc/xdg/lxqt/session.conf
-    cp config_files/panel.conf /etc/xdg/lxqt/panel.conf
+    sudo mkdir -p /etc/xdg/lxqt
+    sudo cp config_files/lxqt.conf /etc/xdg/lxqt/lxqt.conf
+    sudo cp config_files/session.conf /etc/xdg/lxqt/session.conf
+    sudo cp config_files/panel.conf /etc/xdg/lxqt/panel.conf
     
-    mkdir -p /etc/xdg/pcmanfm-qt/lxqt
-    cp config_files/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
+    sudo mkdir -p /etc/xdg/pcmanfm-qt/lxqt
+    sudo cp config_files/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
     
-    mkdir -p /etc/xdg/xfce4/terminal
-    cp config_files/terminalrc /etc/xdg/xfce4/terminal/terminalrc
+    sudo mkdir -p /etc/xdg/xfce4/terminal
+    sudo cp config_files/terminalrc /etc/xdg/xfce4/terminal/terminalrc
 
-    sed -i '/^TEMPLATES/s/^/#/g' /etc/xdg/user-dirs.defaults
-    sed -i '/^PUBLICSHARE/s/^/#/g' /etc/xdg/user-dirs.defaults
-    sed -i '/^DOCUMENTS/s/^/#/g' /etc/xdg/user-dirs.defaults
-    sed -i '/^MUSIC/s/^/#/g' /etc/xdg/user-dirs.defaults
-    sed -i '/^PICTURES/s/^/#/g' /etc/xdg/user-dirs.defaults
-    sed -i '/^VIDEOS/s/^/#/g' /etc/xdg/user-dirs.defaults
+    sudo sed -i '/^TEMPLATES/s/^/#/g' /etc/xdg/user-dirs.defaults
+    sudo sed -i '/^PUBLICSHARE/s/^/#/g' /etc/xdg/user-dirs.defaults
+    sudo sed -i '/^DOCUMENTS/s/^/#/g' /etc/xdg/user-dirs.defaults
+    sudo sed -i '/^MUSIC/s/^/#/g' /etc/xdg/user-dirs.defaults
+    sudo sed -i '/^PICTURES/s/^/#/g' /etc/xdg/user-dirs.defaults
+    sudo sed -i '/^VIDEOS/s/^/#/g' /etc/xdg/user-dirs.defaults
 }
 ######################################################
 
 
 function nomachine
 {
-    DEBIAN_FRONTEND=noninteractive
     NOMACHINE=https://download.nomachine.com/download/6.9/Linux/nomachine_6.9.2_1_amd64.deb
 
-    apt update
-    apt install curl
+    sudo apt update
+    sudo apt install curl
     curl -fSL $NOMACHINE -o /tmp/nomachine.deb
-    apt install /tmp/nomachine.deb
+    sudo apt install /tmp/nomachine.deb
     rm /tmp/*.deb
-    mkdir -p $HOME/.nx/config
 
+    # mkdir -p $HOME/.nx/config
     # cp $HOME/.ssh/authorized_keys $HOME/.nx/config/authorized.crt \
     # chmod 600 $HOME/.nx/config/authorized.crt
 
@@ -136,15 +135,15 @@ function nomachine
     # sed -i '/#ConnectPolicy /s/^#//g' /usr/NX/etc/server.cfg
 
     # Boot to console, not GUI (required for free version)
-    systemctl enable multi-user.target
-    systemctl set-default multi-user.target
+    sudo systemctl enable multi-user.target
+    sudo systemctl set-default multi-user.target
 
-    /etc/NX/nxserver --restart
+    sudo /etc/NX/nxserver --restart
 }
 ######################################################
 
 
-sudo-check
+# sudo-check
 set-wd
 
 core-packages # Always run first, it does an apt update
