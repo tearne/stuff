@@ -5,29 +5,15 @@ DEBIAN_FRONTEND=noninteractive
 
 sudo apt update
 
+
+######################################################
+# Helpers
+######################################################
 function apt-if-needed {
     if ! type $1 &> /dev/null ; then
         sudo apt install -y $1
     fi
 }
-
-function install-sdk {
-    apt-if-needed zip
-    apt-if-needed unzip
-    curl -s "https://get.sdkman.io" | bash
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-    (sdk install java) || true
-    (sdk install sbt) || true
-    sdk flush archives
-}
-install-sdk
-######################################################
-
-apt-if-needed snapd
-sudo snap install intellij-idea-community --classic
-######################################################
-
 function save-alias {
     # https://unix.stackexchange.com/questions/153977/automatically-put-an-alias-into-bashrc-or-zshrc
 
@@ -46,8 +32,34 @@ function save-alias {
     # Loading aliases
     source $ALIASES_FILE_PATH
 }
-######################################################
 
+
+######################################################
+# Java and SBT
+######################################################
+function install-sdk {
+    apt-if-needed zip
+    apt-if-needed unzip
+    curl -s "https://get.sdkman.io" | bash
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+    (sdk install java) || true
+    (sdk install sbt) || true
+    sdk flush archives
+}
+install-sdk
+
+
+######################################################
+# Intellij IDEA CE
+######################################################
+apt-if-needed snapd
+sudo snap install intellij-idea-community --classic
+
+
+######################################################
+# Smartgit
+######################################################
 function install-smartgit {
     apt-if-needed flatpak
     flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -60,4 +72,3 @@ function install-smartgit {
     echo "#################################################################"
 }
 install-smartgit
-######################################################
