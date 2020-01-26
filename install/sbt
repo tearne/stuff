@@ -1,6 +1,0 @@
-#!/bin/bash
-DIR='sbt-1.1.0'
-mkdir -p ~/bin/$DIR
-curl -L https://github.com/sbt/sbt/releases/download/v1.1.0/sbt-1.1.0.tgz | tar xz --strip 1 --directory ~/bin/$DIR
-rm ~/bin/sbt
-ln -s ~/bin/$DIR/bin/sbt ~/bin/sbt
