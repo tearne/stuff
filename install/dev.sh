@@ -53,10 +53,10 @@ function install-smartgit {
     flatpak --user install -y flathub com.syntevo.SmartGit
 
     save-alias 'smartgit=flatpak run com.syntevo.SmartGit'
-    echo "##############################################################"
+    echo "################################################################"
     echo "source $HOME/.bashrc or open new terminal to update aliases"
     echo "You may need to reboot to make the icon to appear in the menu"
-    echo "###############################################################"
+    echo "#################################################################"
 }
 install-smartgit
 ######################################################
