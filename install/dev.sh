@@ -44,6 +44,7 @@ function install-smartgit() {
     sudo flatpak install -y flathub com.syntevo.SmartGit
 
     save-alias smartgit=flatpak run com.syntevo.SmartGit
+    echo "source $HOME/.bashrc or open new terminal"
 }
 install-smartgit
 ######################################################
