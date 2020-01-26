@@ -43,7 +43,7 @@ function install-smartgit() {
     sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     sudo flatpak install -y flathub com.syntevo.SmartGit
 
-    save-alise smartgit=flatpak run com.syntevo.SmartGit
+    save-alias smartgit=flatpak run com.syntevo.SmartGit
 }
 install-smartgit
 ######################################################
