@@ -92,15 +92,15 @@ function user-packages
 function config
 {
     sudo mkdir -p /etc/xdg/lxqt
-    sudo cp config_files/lxqt.conf /etc/xdg/lxqt/lxqt.conf
-    sudo cp config_files/session.conf /etc/xdg/lxqt/session.conf
-    sudo cp config_files/panel.conf /etc/xdg/lxqt/panel.conf
+    sudo cp lxqt_config_files/lxqt.conf /etc/xdg/lxqt/lxqt.conf
+    sudo cp lxqt_config_files/session.conf /etc/xdg/lxqt/session.conf
+    sudo cp lxqt_config_files/panel.conf /etc/xdg/lxqt/panel.conf
     
     sudo mkdir -p /etc/xdg/pcmanfm-qt/lxqt
-    sudo cp config_files/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
+    sudo cp lxqt_config_files/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
     
     sudo mkdir -p /etc/xdg/xfce4/terminal
-    sudo cp config_files/terminalrc /etc/xdg/xfce4/terminal/terminalrc
+    sudo cp lxqt_config_files/terminalrc /etc/xdg/xfce4/terminal/terminalrc
 
     sudo sed -i '/^TEMPLATES/s/^/#/g' /etc/xdg/user-dirs.defaults
     sudo sed -i '/^PUBLICSHARE/s/^/#/g' /etc/xdg/user-dirs.defaults
