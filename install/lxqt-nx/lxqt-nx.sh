@@ -80,8 +80,8 @@ function user-packages
         qpdf \
         qdirstat \
         xarchiver \
-        unzip \ # sdkman
-        zip     # sdkman
+        unzip \
+        zip
 
     #apt install -y --no-install-recommends snapd
     #snap install --classic code
