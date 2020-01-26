@@ -19,6 +19,7 @@ function install-sdk {
 
     (sdk install java) || true
     (sdk install sbt) || true
+    sdk flush archives
 }
 install-sdk
 ######################################################
