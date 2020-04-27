@@ -1,28 +1,28 @@
-FROM phusion/baseimage:0.11 as build
+FROM ubuntu:bionic
 
-ENV NOMACHINE https://download.nomachine.com/download/6.7/Linux/nomachine_6.7.6_11_amd64.deb
+ENV NOMACHINE https://download.nomachine.com/download/6.9/Linux/nomachine_6.9.2_1_amd64.deb
 ENV DEBIAN_FRONTEND noninteractive
 
 EXPOSE 4000
 
-RUN add-apt-repository ppa:papirus/papirus \
+RUN apt update \
+&&  apt install -y software-properties-common \
+&&  add-apt-repository ppa:papirus/papirus \
 &&  add-apt-repository ppa:ubuntu-desktop/ubuntu-make \
 &&  apt update \
 &&  apt -y full-upgrade \
 &&  apt install -y --no-install-recommends \
-        curl \
-        lxqt-core \        
+        lxqt-core \
+        dbus-x11 \
         openbox \
-        dbus-x11 \   
         lxqt-about \
         lxqt-admin \
         lxqt-openssh-askpass \
-        # qterminal \
         xfce4-terminal \
         lxqt-sudo \
         papirus-icon-theme \
         # oxygen-icon-theme \
-        # --== adwaita-icon-theme suppressed by "-" at end ==--
+        # --== adwaita-icon-theme below is suppressed by "-" at end ==--
         adwaita-icon-theme- \
         apt-transport-https \
         ca-certificates \
@@ -40,6 +40,7 @@ RUN add-apt-repository ppa:papirus/papirus \
         # glances \
         # iotop \
         # qdirstat \
+        # filelight \
         # lximage-qt \
         # qpdf \
         # xarchiver \
@@ -59,6 +60,20 @@ COPY config/session.conf /etc/xdg/lxqt/session.conf
 COPY config/panel.conf  /etc/xdg/lxqt/panel.conf
 COPY config/pcmanfm-qt_settings.conf /etc/xdg/pcmanfm-qt/lxqt/settings.conf
 COPY config/terminalrc /etc/xdg/xfce4/terminal/terminalrc
+
+# RUN mkdir -p /usr/share/sce/ \    
+# && wget -P /usr/share/sce/ https://www.dropbox.com/s/0wwyabwpl3vkgbm/20200323_wallpaper.png    
+    
+# Remove detrimental leave options from menu
+RUN cd /usr/share/applications \
+&&  rm -f lxqt-hibernate.desktop lxqt-suspend.desktop lxqt-leave.desktop lxqt-logout.desktop lxqt-lockscreen.desktop
+
+# RUN sed -i '/^TEMPLATES/s/^/#/g' /etc/xdg/user-dirs.defaults \
+# &&  sed -i '/^PUBLICSHARE/s/^/#/g' /etc/xdg/user-dirs.defaults \
+# &&  sed -i '/^DOCUMENTS/s/^/#/g' /etc/xdg/user-dirs.defaults \
+# &&  sed -i '/^MUSIC/s/^/#/g' /etc/xdg/user-dirs.defaults \
+# &&  sed -i '/^PICTURES/s/^/#/g' /etc/xdg/user-dirs.defaults \
+# &&  sed -i '/^VIDEOS/s/^/#/g' /etc/xdg/user-dirs.defaults
 
 COPY config/setOneDesktop.py /tmp/setOneDesktop.py
 RUN chmod +x /tmp/setOneDesktop.py \
@@ -80,5 +95,4 @@ USER root
 COPY script/run.sh run.sh
 RUN chmod +x run.sh
 
-ENTRYPOINT ["/sbin/my_init"]
-CMD ["--", "./run.sh"]
+ENTRYPOINT ["./run.sh"]

@@ -1,13 +1,13 @@
-docker build -t tearne/lxqt:latest -t tearne/lxqt:6.7.6 .
+docker build -t tearne/lxqt:latest -t tearne/lxqt:6.9 .
 
-mkdir volume
+mkdir dockervolume
 
 docker run \
   -p 127.0.0.1:4000:4000 \
   --privileged \
   --name lxqt \
   -e PASS=password \
-  -v $HOME/docker:/home/user/volume \
+  -v $HOME/dockervolume:/home/user/volume \
   tearne/lxqt
 
 Options:
