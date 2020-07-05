@@ -1,26 +1,10 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
-
-ARG GITHUB_TOKEN
-
 ARG NODE_VERSION=10.21.0
-# ARG NODE_VERSION=10.15.3
-# ARG LLVM=11
 ENV NODE_VERSION $NODE_VERSION
-
 ENV YARN_VERSION 1.22.4
-# ENV YARN_VERSION 1.13.0
 
-# use "latest" or "next" version for Theia packages
-# ARG version=latest
-
-# Optionally build a striped Theia application with no map file or .ts sources.
-# Makes image ~150MB smaller when enabled
-ARG strip=false
-ENV strip=$strip
-
-#Common deps
 RUN apt-get update && \
     apt-get -y install build-essential \
                        curl \
@@ -74,7 +58,6 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
-
 RUN set -ex \
     && for key in \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
@@ -94,9 +77,7 @@ RUN set -ex \
     && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
     && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
-
-
-## User account
+# User account
 RUN adduser --disabled-password --gecos '' theia
 
 RUN chmod g+rw /home && \
@@ -104,11 +85,15 @@ RUN chmod g+rw /home && \
     chown -R theia:theia /home/theia && \
     chown -R theia:theia /home/project;
 
-# Theia application
 USER theia
 WORKDIR /home/theia
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Rust 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+&&  . $HOME/.cargo/env \
+&&  rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu \
+&&  rustup component add rust-src --toolchain stable-x86_64-unknown-linux-gnu \
+&&  rustup component add rust-analysis --toolchain stable-x86_64-unknown-linux-gnu
 
 ADD package.json ./package.json
 
@@ -125,6 +110,7 @@ RUN yarn --pure-lockfile && \
 
 EXPOSE 3000
 ENV SHELL=/bin/bash \
-    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins
+    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/plugins \
+    PATH="/home/theia/.cargo/bin:${PATH}"
 
 ENTRYPOINT [ "node", "/home/theia/src-gen/backend/main.js", "/home/project", "--hostname=0.0.0.0" ]
