@@ -13,6 +13,7 @@ and have put in a new drive for sda.  Now:
     sgdisk --replicate=/dev/sda /dev/sdb
     sgdisk --randomize-guids /dev/sda
     grub-install /dev/sda
+
     zpool replace rpool sda3 /dev/sda3
 
     or, for adding a disk to a raid-0 mirror with only one disk:
@@ -26,8 +27,11 @@ From: https://forum.proxmox.com/threads/different-size-disks-for-zfs-raidz-1-roo
 
 
 ## Wiping ZFS Disk
-Wiping last bit of disk to clean an old ZFS disk
-mke2fs /dev/sdx
+Wiping last bit of disk to clean an old ZFS disk.
+
+Try `mke2fs /dev/sdx`
+
+If that doesn't work, may need to wipe end of disk:
 
 https://unix.stackexchange.com/questions/13848/wipe-last-1mb-of-a-hard-drive
 
@@ -44,3 +48,6 @@ Import:
 
     zpool list
     zpool import tank10
+
+
+`zpool import -a` will scan and try to import stuff.

@@ -121,6 +121,7 @@ Adding `-M test` at the end will cause emails at startup (to check it works):
         # Email warnings and at startup
         /dev/sda -m root -M test 
 
+Finally `service smartmontools restart`
 
 ## ZFS
 

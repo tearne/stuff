@@ -25,6 +25,19 @@ If not rebooting:
     wpa_cli -i wlan0 reconfigure
 
 
+
+To turn WiFi off/on:
+
+    sudo rfkill block wifi
+    sudo rfkill unblock wifi
+
+To check the status of your wireless communication interfaces:
+
+    sudo rfkill list all
+
+
+
+
 # SSH
 Enable ssh by creating `ssh` file in `/boot`, or, when running `sudo systemctl enable ssh`, and `sudo systemctl start ssh`.
 
