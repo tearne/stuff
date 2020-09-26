@@ -1,12 +1,15 @@
 
 # Raspberry Pi Zero
 
+## Hostname
+Change in `/rootfs/etc/hostname` and `/rootfs/etc/hosts`
+
 ## UART Serial
-In `/boot/config.txt` add `enable_uart=1` at the end ([source](https://learn.adafruit.com/adafruit-piuart-usb-console-and-power-add-on-for-raspberry-pi))
+In `/boot/config.txt` add `enable_uart=1` at the end <sup>[(source)](https://learn.adafruit.com/adafruit-piuart-usb-console-and-power-add-on-for-raspberry-pi)</sup>.
 
-[CP2104 driver](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers) for OSX (win/lin don't need it)<sup>[Source].(https://learn.adafruit.com/adafruit-piuart-usb-console-and-power-add-on-for-raspberry-pi/setup-software)</sup>
+[CP2104 driver](https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers) for OSX; win/lin don't need it<sup>[(Source)](https://learn.adafruit.com/adafruit-piuart-usb-console-and-power-add-on-for-raspberry-pi/setup-software)</sup>
 
-Look for the device `ls /dev/cu.* /dev/tty.*` and connect `screen /dev/tty.SLAB_USBtoUART 115200`
+When connecting on OSX look for device `ls /dev/cu.* /dev/tty.*` and connect with `screen /dev/tty.SLAB_USBtoUART 115200`
 
 ## Wifi
 
@@ -21,27 +24,14 @@ wpa_supplicant.conf in boot (or directly in /etc/wpa_supplicant dir)
         psk="myPassword"
     }
 
-If not rebooting:
-    wpa_cli -i wlan0 reconfigure
+If not rebooting run `wpa_cli -i wlan0 reconfigure`
 
-
-
-To turn WiFi off/on:
+To turn WiFi off/on and check status:
 
     sudo rfkill block wifi
     sudo rfkill unblock wifi
-
-To check the status of your wireless communication interfaces:
-
     sudo rfkill list all
 
 
-
-
-# SSH
-Enable ssh by creating `ssh` file in `/boot`, or, when running `sudo systemctl enable ssh`, and `sudo systemctl start ssh`.
-
-# Unicorn hat hd setup
-
-* sudo apt install python3-pip python3-numpy
-* pip3 install --user unicornhathd
+## SSH
+Enable ssh by creating `ssh` file in `/boot`, or, if already running `sudo systemctl enable ssh`, and `sudo systemctl start ssh`.
