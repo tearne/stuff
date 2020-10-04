@@ -4,7 +4,7 @@ https://www.npmjs.com/search?q=keywords:theia-extension
 
 docker rmi $(docker images -q)
 
-docker build -t tearne/theia:latest .  
+docker build -t tearne/theia:latest .
 
 docker run -it --rm --init -p 3000:3000 -v "$(pwd):/home/project" tearne/theia:latest
 

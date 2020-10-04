@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG NODE_VERSION=10.21.0
+ARG NODE_VERSION=12.18.3
 ENV NODE_VERSION $NODE_VERSION
 ENV YARN_VERSION 1.22.4
 
@@ -88,7 +88,7 @@ RUN chmod g+rw /home && \
 USER theia
 WORKDIR /home/theia
 
-# Rust 
+# Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
 &&  . $HOME/.cargo/env \
 &&  rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu \
@@ -106,7 +106,7 @@ RUN yarn --pure-lockfile && \
     echo *.ts.map >> .yarnclean && \
     echo *.spec.* >> .yarnclean && \
     yarn autoclean --force && \
-    yarn cache clean 
+    yarn cache clean
 
 EXPOSE 3000
 ENV SHELL=/bin/bash \
