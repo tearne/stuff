@@ -1,0 +1,1 @@
+sudo systemctl stop ntp && sudo ntpd -q -g && sudo systemctl start ntp

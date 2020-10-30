@@ -68,25 +68,6 @@ apt-get -y autoremove --purge
 echo "Installing ntp and busybox-syslogd..."
 apt-get -y install ntp busybox-syslogd; dpkg --purge rsyslog
 
-# Install watchdog 
-# apt-get install -y --force-yes watchdog
-# # $MODULE is specific watchdog module name
-# MODULE=${WATCHDOG_MODULES[($WD_TARGET-1)]}
-# # Add to /etc/modules, update watchdog config file
-# append1 /etc/modules $MODULE $MODULE
-# replace /etc/watchdog.conf "#watchdog-device" "watchdog-device"
-# replace /etc/watchdog.conf "#max-load-1" "max-load-1"
-# # Start watchdog at system start and start right away
-# # Raspbian Stretch needs this package installed first
-# apt-get install -y --force-yes insserv
-# insserv watchdog; /etc/init.d/watchdog start
-# # Additional settings needed on Jessie
-# append1 /lib/systemd/system/watchdog.service "WantedBy" "WantedBy=multi-user.target"
-# systemctl enable watchdog
-# # Set up automatic reboot in sysctl.conf
-# replaceAppend /etc/sysctl.conf "^.*kernel.panic.*$" "kernel.panic = 10"
-
-
 # Add fastboot, noswap and/or ro to end of /boot/cmdline.txt
 append2 /boot/cmdline.txt fastboot fastboot
 append2 /boot/cmdline.txt noswap noswap
@@ -97,7 +78,7 @@ rm -rf /var/spool
 ln -s /tmp /var/spool
 
 # Make SSH work
-replaceAppend /etc/ssh/sshd_config "^.*UsePrivilegeSeparation.*$" "UsePrivilegeSeparation no"
+# replaceAppend /etc/ssh/sshd_config "^.*UsePrivilegeSeparation.*$" "UsePrivilegeSeparation no"
 
 # Change spool permissions in var.conf (rondie/Margaret fix)
 replace /usr/lib/tmpfiles.d/var.conf "spool\s*0755" "spool 1777"
@@ -142,6 +123,12 @@ alias rw='sudo mount -o remount,rw / ; sudo mount -o remount,rw /boot'
 
 # setup fancy prompt"
 PROMPT_COMMAND=set_bash_prompt
+EOF
+
+# alias to refresh time via ntp
+sudo tee -a /etc/bash.bashrc > /dev/null <<'EOF'
+
+alias ntp_refresh='sudo systemctl stop ntp && sudo ntpd -q -g && sudo systemctl start ntp'
 EOF
 
 

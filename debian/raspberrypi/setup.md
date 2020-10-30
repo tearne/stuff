@@ -35,3 +35,6 @@ To turn WiFi off/on and check status:
 
 ## SSH
 Enable ssh by creating `ssh` file in `/boot`, or, if already running `sudo systemctl enable ssh`, and `sudo systemctl start ssh`.
+
+## SPI ON
+Uncomment `dtparam=spi=on` in `/boot/config.txt`
