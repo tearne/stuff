@@ -11,6 +11,9 @@ In `/boot/config.txt` add `enable_uart=1` at the end <sup>[(source)](https://lea
 
 When connecting on OSX look for device `ls /dev/cu.* /dev/tty.*` and connect with `screen /dev/tty.SLAB_USBtoUART 115200`
 
+## SPI ON
+Uncomment `dtparam=spi=on` in `/boot/config.txt`
+
 ## Wifi
 
 wpa_supplicant.conf in boot (or directly in /etc/wpa_supplicant dir)
@@ -36,5 +39,3 @@ To turn WiFi off/on and check status:
 ## SSH
 Enable ssh by creating `ssh` file in `/boot`, or, if already running `sudo systemctl enable ssh`, and `sudo systemctl start ssh`.
 
-## SPI ON
-Uncomment `dtparam=spi=on` in `/boot/config.txt`
