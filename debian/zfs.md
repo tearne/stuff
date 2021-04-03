@@ -1,3 +1,41 @@
+# ZFS
+Install on ubuntu with
+sudo apt install zfs-dkms
+
+Scrubs are setup in cron by default. See `/etc/cron.d/zfsutils-linux`.
+
+### Email alerts
+Assumes a working email relay.
+
+Install
+
+    sudo apt install zfs-zed
+
+Configure `/etc/zfs/zed.d/zed.rc`
+
+* Uncomment (if not already):
+
+        ZED_EMAIL_ADDR="root"    
+
+    Proxmox forwards to configured email address (Datacenter &rarr; Users &rarr; root &rarr; Edit)
+    
+* Uncomment:
+
+        ZED_EMAIL_PROG="mail"
+
+* Set:
+
+        ZED_NOTIFY_VERBOSE=1 
+        ZED_NOTIFY_DATA=1
+
+Reload service :
+
+        systemctl restart zfs-zed`
+
+### Related
+
+* https://www.reddit.com/r/homelab/comments/8c09pr/guide_to_setting_up_zed_to_email_alerts_for_zfs/
+
 ## Replacing a root ZFS mirror drive
 
 Suppose we have
@@ -46,8 +84,9 @@ Clean export:
 
 Import:
 
+    zpool import
+    zpool import tank10 -f
     zpool list
-    zpool import tank10
 
 
 `zpool import -a` will scan and try to import stuff.
