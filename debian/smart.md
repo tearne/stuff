@@ -12,6 +12,8 @@ Temp info
 Check disks have SMART support and it's enabled (may need `-d sat` as above):
 
         smartctl -a /dev/sda | grep "support is:"
+        sudo smartctl -a -d sat /dev/sda | grep "support is:"
+        
 
 Setup `/etc/default/smartmontools`:
 
@@ -19,16 +21,16 @@ Setup `/etc/default/smartmontools`:
         # Check every 3 hrs
         smartd_opts="--interval=10800"
 
-Setup `/etc/smartd.conf`.  E.g. something like;
+Setup `/etc/smartd.conf`.  Commenting out the `DEVICESCAN` line and setting something like;
         
         # -a      Defaults ( -Hfpu -l error -l selftest -C 197 -U 198)
         # -s ...  Long test Fri@11, short every day @ 10
         # -m      Email warnings 
         # -M      Test email at startup to check it works
-        /dev/sda -a -s (L/../../6/11|S/../.././10) -m root -M tests
-        /dev/sdb -a -s (L/../../6/13|S/../.././11) -m root -M tests
-        /dev/sdc -a -s (L/../../6/15|S/../.././12) -m root -M tests
-        /dev/sdd -a -s (L/../../6/17|S/../.././13) -m root -M tests
+        /dev/sda -a -s (L/../../6/11|S/../.././10) -m root -M test
+        /dev/sdb -a -s (L/../../6/13|S/../.././11) -m root -M test
+        /dev/sdc -a -s (L/../../6/15|S/../.././12) -m root -M test
+        /dev/sdd -a -s (L/../../6/17|S/../.././13) -m root -M test
 
 May need `-d sat` as above:
 

@@ -4,7 +4,7 @@ Authentication library:
 
     apt install libsasl2-modules
 
-On Ubuntu also install `postfix` and `mail` (required for using postmap).
+On Ubuntu also install `postfix` and `mailutils` (required for using postmap and testing with `mail` command).
 
 Make **temporary** password file `/etc/postfix/sasl_passwd` containing login details:
 
