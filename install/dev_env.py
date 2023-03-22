@@ -8,28 +8,29 @@
 import subprocess
 import sys
 import os
-import getpass
 import importlib
 import site
 import tempfile
 import shutil
 import re
 
-global pexpect
-global getpass
 
 def main():
-    sudo("apt update", 60)
-    sudo("""apt install -y curl wget python3-pip""", 60)
-
+    global pexpect
+    global getpass
     pexpect = ensure_import("pexpect")
     getpass = ensure_import("getpass")
+
+    password = Password()
+
+    sudo("apt update", password, 60)
+    sudo("""apt install -y curl wget python3-pip""", password, 60)
 
     install_cargo()
     install_cargo_packages("cargo-deb")
 
     py_version = "3.11.2"
-    compile_and_install_python(py_version)
+    compile_and_install_python(py_version, password)
     ensure_venv(py_version, 
         "GitPython",
         "boto3",
@@ -48,7 +49,7 @@ def ensure_venv(version, *libs):
     run(f""". .env/bin/activate && pip{ver_minor} install {" ".join(libs)}""")
 
 
-def compile_and_install_python(version, del_tmp=True):
+def compile_and_install_python(version, password, del_tmp=True):
     ver_minor='.'.join(version.split('.')[0:2])
 
     if run(f"python{ver_minor} --version") == 0:
@@ -59,6 +60,7 @@ def compile_and_install_python(version, del_tmp=True):
 
     sudo(
         "DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install build-essential libreadline-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev",
+        password,
         60
     )
     
@@ -73,11 +75,13 @@ def compile_and_install_python(version, del_tmp=True):
     py_dir = f"{tempdir}/Python-{version}"
     sudo(
         "./configure --enable-optimizations",
+        password,
         -1,
         cwd=py_dir
     )    
     sudo(
         "make altinstall",
+        password,
         1200,
         cwd=py_dir
     )
@@ -85,6 +89,7 @@ def compile_and_install_python(version, del_tmp=True):
     if del_tmp:
         sudo(
             f"rm -rf {tempdir}",
+            password,
             5
         )
 
@@ -118,8 +123,6 @@ class Password:
             self.p = getpass.getpass()
             return self.p
 
-password = Password()
-
 def run(cmd, cwd=None):
     print(" *** Running:", cmd)
     return subprocess.run(
@@ -134,7 +137,7 @@ def run(cmd, cwd=None):
 def is_already_root():
     return os.geteuid() == 0
 
-def sudo(cmd, timeout = -1, cwd=None):
+def sudo(cmd, password, timeout = -1, cwd=None):
     if is_already_root():
         run(cmd, cwd)
     else:
@@ -148,7 +151,7 @@ def sudo(cmd, timeout = -1, cwd=None):
             print(f"Error waiting for password prompt: {options[index]} - {child.before.decode()}")
             sys.exit(1)
         
-        child.sendline(password)
+        child.sendline(password.get())
         
         options = [pexpect.EOF, 'try again', pexpect.TIMEOUT]
         index = child.expect(options, timeout=timeout)
