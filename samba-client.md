@@ -1,20 +1,20 @@
+# Mounting Samba share
 
-
-# mount
+## mount
 
     sudo apt install cifs-utils
 
     sudo mount //server/share /mount/point -o username=me,vers=3,uid=me
 
-# fstab
+## fstab
 
-    sudo apt install cifs-utils autofs
+    sudo apt install cifs-utils
 
 In `/etc/fstab`
 
     //server/share /media/share  cifs credentials=/home/me/.smb,iocharset=utf8,users,uid=me,vers=3.0  0 0
 
-# autofs
+## autofs
 
     sudo apt install cifs-utils autofs
 

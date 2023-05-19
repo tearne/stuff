@@ -4,7 +4,7 @@ sudo apt install zfs-dkms
 
 Scrubs are setup in cron by default. See `/etc/cron.d/zfsutils-linux`.
 
-### Email alerts
+## Email alerts
 Assumes a working email relay.
 
 Install
@@ -17,7 +17,7 @@ Configure `/etc/zfs/zed.d/zed.rc`
 
         ZED_EMAIL_ADDR="root"    
 
-    Proxmox forwards to configured email address (Datacenter &rarr; Users &rarr; root &rarr; Edit)
+Proxmox forwards to configured email address (Datacenter &rarr; Users &rarr; root &rarr; Edit)
     
 * Uncomment:
 
@@ -32,7 +32,13 @@ Reload service :
 
         systemctl restart zfs-zed`
 
-### Related
+
+### Other
+
+Email on scrub start
+* https://forum.proxmox.com/threads/zfs-scrub_start-event-for-rpool.56159/
+
+## Related
 
 * https://www.reddit.com/r/homelab/comments/8c09pr/guide_to_setting_up_zed_to_email_alerts_for_zfs/
 
@@ -46,7 +52,11 @@ Suppose we have
 	    sda3               OFFLINE      0     0     0
 	    sdb3               ONLINE       0     0     0
 
-and have put in a new drive for sda.  Now:
+To find the details of the duff disk (may need a `-d sat`):
+
+    smartctl -a /dev/sdb | grep Serial
+
+Once you've put in a new drive for sda:
 
     sgdisk --replicate=/dev/sda /dev/sdb
     sgdisk --randomize-guids /dev/sda
@@ -90,3 +100,20 @@ Import:
 
 
 `zpool import -a` will scan and try to import stuff.
+
+
+## Checking properties incl ashift
+
+zdb -C
+
+## Encrypted ZFS
+
+sudo zfs create -o encryption=on -o keylocation=prompt -o keyformat=passphrase tank12/encrypted
+
+sudo zfs mount tank12/encrypted -l
+
+https://pov.es/linux/ubuntu/ubuntu-20-04-install-ubuntu-with-zfs-and-encryption/
+
+## Other things
+
+https://zedfs.com/all-you-have-to-know-about-reading-zfs-disk-usage/

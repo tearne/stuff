@@ -22,36 +22,38 @@ Delete temporary file `/etc/postfix/sasl_passwd`
 
 Add/change lines in `/etc/postfix/main.cf`:
 
-    # Set gmail as relay
-    relayhost = smtp.gmail.com:587
+```
+# Set gmail as relay
+relayhost = smtp.gmail.com:587
 
-    smtp_use_tls = yes
-    smtp_sasl_auth_enable = yes
-   
-    # Eliminates default security options which are incompatible with gmail
-    smtp_sasl_security_options = noanonymous
-    smtp_sasl_mechanism_filter = plain
-    
-    smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-    smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+smtp_use_tls = yes
+smtp_sasl_auth_enable = yes
 
-Reload config:
+# Eliminates default security options which are incompatible with gmail
+smtp_sasl_security_options = noanonymous
+smtp_sasl_mechanism_filter = plain
 
-    systemctl restart postfix
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+```
 
-Test:
+If problems, check that `myhostname` in `/etc/postfix/main.cf` is the FQDN, e.g. `host.place.com` or `host.lan`.
 
-    printf "$(date)" | mail -s "$USER at $HOSTNAME" [me@place.com]
+Reload config: `systemctl restart postfix`
+
+Test: `printf "$(date)" | mail -s "$USER at $HOSTNAME" [me@place.com]`
 
 Test if forwarding root works with (if not see fix below):
 
-    printf "Via root mailbox\n$(date)" | mail -s "$USER at $HOSTNAME via root" root
+```
+printf "Via root mailbox\n$(date)" | mail -s "$USER at $HOSTNAME via root" root
+```
 
 https://forum.proxmox.com/threads/how-to-use-google-apps-smtp-to-email-warnings.38236/
 
 ## Forwarding root
 
-Edit `/etc/aliases` to append
+Edit `/etc/aliases` to append (space, not tab)
 
     root: [me@place.com]
 
