@@ -1,1 +1,0 @@
-git diff sometag . ':!*unwanted.file'
