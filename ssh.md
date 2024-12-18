@@ -1,4 +1,13 @@
+
 # SSH Host fingerprints
+## VS Code Agent
+
+```
+eval "$(ssh-agent)"
+export SSH_AUTH_SOCK=$(ls -t /tmp/ssh-**/* | head -1)
+```
+- https://github.com/microsoft/vscode/issues/168202
+
 ## SSH client
 
     ssh-keygen -l -f /etc/ssh/ssh_host_ecdsa_key.pub -E sha256
